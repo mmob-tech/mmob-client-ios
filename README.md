@@ -1,3 +1,3 @@
 # MmobClient
 
-A description of this package.
+Please check our documentation at https://docs.mmob.com
