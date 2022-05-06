@@ -77,7 +77,7 @@ public struct MmobClient {
             "town_city": customer_info.town_city,
             "postcode": customer_info.postcode,
             "cp_id": company.cp,
-            "deployemnt_id": company.integration
+            "cp_deployment_id": company.integration
         ]
         
         
