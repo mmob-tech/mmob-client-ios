@@ -35,12 +35,34 @@ public struct MmobCompanyConfiguration {
     public init(cp_id: String, integration_id: String, environment: String = "production") {
         self.cp_id = cp_id
         self.integration_id = integration_id
-        self.production = environment == "production"
+        self.environment = environment
     }
     
     var cp_id: String
     var integration_id: String
-    var production: Bool
+    var environment: String
+}
+
+
+public struct MmobDistributionConfiguration {
+    public init(distribution_id: String, environment: String = "production") {
+        self.distribution_id = distribution_id
+        self.environment = environment
+    }
+    
+    var distribution_id: String
+    
+    var environment: String
+}
+
+public struct MmobDistribution {
+    public init(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) {
+        self.configuration = configuration
+        self.customer = customer
+    }
+    
+    var configuration: MmobDistributionConfiguration
+    var customer: MmobCustomerInfo
 }
 
 public struct MmobConfiguration {
@@ -48,50 +70,132 @@ public struct MmobConfiguration {
         self.configuration = configuration
         self.customer = customer
     }
-
+    
     
     var configuration: MmobCompanyConfiguration
     var customer: MmobCustomerInfo
 }
 
-public struct MmobClient {
+typealias MmobParameters = [String: String?];
 
+public struct MmobClient {
+    
+    static func getBundlerId() -> String {
+        let bundleID = Bundle.main.bundleIdentifier!
+        var bundleParts = bundleID.components(separatedBy: ".")
+        bundleParts.removeLast()
+        let identifier = bundleParts.joined(separator: ".")
+        return identifier
+    }
+
+    static func getUrl(environment: String, suffix: String = "boot") -> URL {
+        // Set client url entry point
+        let local_url = URL(string: "http://localhost:3100/" + suffix)!
+        let dev_url = URL(string: "https://client-ingress.dev.mmob.com/" + suffix)!
+        let stag_url = URL(string: "https://client-ingress.stag.mmob.com/" + suffix)!
+        let prod_url = URL(string: "https://client-ingress.prod.mmob.com/" + suffix)!
+        
+        
+        switch environment {
+        case "local":
+            return local_url
+        case "dev":
+            return dev_url
+            
+        case "stag":
+            return stag_url
+            
+        default:
+            return prod_url
+            
+        }
+        
+    }
+    
+    
+    static func getParameters(customer: MmobCustomerInfo) -> MmobParameters {
+        let parameters: MmobParameters = [
+            "email": customer.email,
+            "first_name": customer.first_name,
+            "surname": customer.surname,
+            "title": customer.title,
+            "building_number": customer.building_number,
+            "address_1": customer.address_1,
+            "town_city": customer.town_city,
+            "postcode": customer.postcode,
+
+        ]
+        return parameters
+    }
+    
+    public static func getDistribution(mmobDistribution: MmobDistribution) -> MmobClientView {
+        let view =  WKWebView()
+        let configuration = mmobDistribution.configuration
+        let customer = mmobDistribution.customer
+        
+        let url = getUrl(environment: configuration.environment, suffix: "tpp/distribution/boot")
+        
+        let parameters = getParameters(customer: customer)
+        
+
+        var request = URLRequest(url: url);
+        request.httpMethod = "POST";
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let bootRequestConfiguration = [
+            "distribution_id": configuration.distribution_id,
+            "inferred_identifier_type": "ios",
+            "inferred_identifier_value": getBundlerId()
+        ]
+        
+        let bootRequest = [
+            "configuration": bootRequestConfiguration,
+            "customer": parameters
+        ]
+        
+        print("bootRequest",bootRequest)
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: bootRequest, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        view.load(request)
+        return view
+    }
+    
     public static func getClient(mmobConfiguration: MmobConfiguration) -> MmobClientView   {
         
         
         let view =  WKWebView()
         
-
-        let customer_info = mmobConfiguration.customer
-        let company = mmobConfiguration.configuration
         
+        let customer = mmobConfiguration.customer
+        let company = mmobConfiguration.configuration
 
-        // Create parameters object
         let parameters: [String: String?] = [
-            "email": customer_info.email,
-            "first_name": customer_info.first_name,
-            "surname": customer_info.surname,
-            "title": customer_info.title,
-            "building_number": customer_info.building_number,
-            "address_1": customer_info.address_1,
-            "town_city": customer_info.town_city,
-            "postcode": customer_info.postcode,
+            "email": customer.email,
+            "first_name": customer.first_name,
+            "surname": customer.surname,
+            "title": customer.title,
+            "building_number": customer.building_number,
+            "address_1": customer.address_1,
+            "town_city": customer.town_city,
+            "postcode": customer.postcode,
             "cp_id": company.cp_id,
             "cp_deployment_id": company.integration_id
         ]
+
         
-        
-        // Set client url entry point
-        let stag_url = URL(string: "https://client-ingress.stag.mmob.com/boot")!
-        let prod_url = URL(string: "https://client-ingress.prod.mmob.com/boot")!
-        
-        let url = company.production ? prod_url : stag_url
-        
-        // Configure request
+        let url = getUrl(environment: company.environment)
         var request = URLRequest(url: url);
         request.httpMethod = "POST";
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        print("url", url)
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
@@ -99,7 +203,7 @@ public struct MmobClient {
             print(error.localizedDescription)
         }
         
-
+        
         view.load(request)
         return view
     }
