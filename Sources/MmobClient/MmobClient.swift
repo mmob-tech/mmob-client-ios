@@ -101,7 +101,6 @@ public struct MmobClient {
             return local_url
         case "dev":
             return dev_url
-            
         case "stag":
             return stag_url
             
@@ -145,16 +144,16 @@ public struct MmobClient {
         
         let bootRequestConfiguration = [
             "distribution_id": configuration.distribution_id,
-            "inferred_identifier_type": "ios",
-            "inferred_identifier_value": getBundlerId()
+            "identifier_type": "ios",
+            "identifier_value": getBundlerId()
         ]
         
         let bootRequest = [
             "configuration": bootRequestConfiguration,
-            "customer": parameters
+            "customer_info": parameters
         ]
         
-        print("bootRequest",bootRequest)
+
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: bootRequest, options: .prettyPrinted)
@@ -162,6 +161,7 @@ public struct MmobClient {
             print(error.localizedDescription)
         }
         
+
         view.load(request)
         return view
     }
