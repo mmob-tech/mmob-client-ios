@@ -82,10 +82,7 @@ public struct MmobClient {
     
     static func getBundlerId() -> String {
         let bundleID = Bundle.main.bundleIdentifier!
-        var bundleParts = bundleID.components(separatedBy: ".")
-        bundleParts.removeLast()
-        let identifier = bundleParts.joined(separator: ".")
-        return identifier
+        return bundleID
     }
 
     static func getUrl(environment: String, suffix: String = "boot") -> URL {
