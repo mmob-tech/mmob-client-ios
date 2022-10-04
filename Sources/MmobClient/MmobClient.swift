@@ -82,6 +82,7 @@ public struct MmobClient {
     
     static func getBundlerId() -> String {
         let bundleID = Bundle.main.bundleIdentifier!
+        print("BUNDLE ID IS ", bundleID)
         return bundleID
     }
 
