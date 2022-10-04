@@ -158,6 +158,8 @@ public struct MmobClient {
         } catch let error {
             print(error.localizedDescription)
         }
+
+        print(request.httpBody, request)
         
 
         view.load(request)
