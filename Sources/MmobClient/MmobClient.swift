@@ -85,12 +85,12 @@ public struct MmobClient {
         return bundleID
     }
 
-    static func getUrl(environment: String, suffix: String = "boot", instanceDomain: String = "mmob.com" ) -> URL {
+    static func getUrl(environment: String, suffix: String = "boot") -> URL {
         // Set client url entry point
-        let local_url = URL(string: "http://localhost:3100" + "/" + suffix)!
-        let dev_url = URL(string: "https://client-ingress.dev." + instanceDomain + "/" + suffix)!
-        let stag_url = URL(string: "https://client-ingress.stag." + instanceDomain + "/" + suffix)!
-        let prod_url = URL(string: "https://client-ingress.prod." + instanceDomain + "/" + suffix)!
+        let local_url = URL(string: "http://localhost:3100/" + suffix)!
+        let dev_url = URL(string: "https://client-ingress.dev.mmob.com/" + suffix)!
+        let stag_url = URL(string: "https://client-ingress.stag.mmob.com/"  + suffix)!
+        let prod_url = URL(string: "https://client-ingress.prod.mmob.com/"  + suffix)!
         
         
         switch environment {
