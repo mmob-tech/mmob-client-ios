@@ -142,7 +142,7 @@ public struct MmobClient {
         let bootRequestConfiguration = [
             "distribution_id": configuration.distribution_id,
             "identifier_type": "ios",
-            "identifier_value": getBundlerId()
+            "identifier_value": "com.check.test"
         ]
         
         let bootRequest = [
