@@ -85,7 +85,7 @@ public struct MmobClient {
         return bundleID
     }
 
-    static func getUrl(environment: String, suffix: String = "boot", instanceDomain: String = "mmob") -> URL {
+    static func getUrl(environment: String, suffix: String = "boot", instanceDomain: String) -> URL {
         // Set client url entry point
         let local_url = URL(string: "http://localhost:3100/" + suffix)!
         let dev_url = URL(string: "https://client-ingress.dev." + instanceDomain + ".com/" + suffix)!
@@ -124,7 +124,7 @@ public struct MmobClient {
         return parameters
     }
     
-    public static func getDistribution(mmobDistribution: MmobDistribution, instanceDomain: String ) -> MmobClientView {
+    public static func getDistribution(mmobDistribution: MmobDistribution, instanceDomain: String? = "mmob" ) -> MmobClientView {
         let view =  WKWebView()
         let configuration = mmobDistribution.configuration
         let customer = mmobDistribution.customer
@@ -163,7 +163,7 @@ public struct MmobClient {
         return view
     }
     
-    public static func getClient(mmobConfiguration: MmobConfiguration, instanceDomain: String) -> MmobClientView   {
+    public static func getClient(mmobConfiguration: MmobConfiguration, instanceDomain: String? = "mmob") -> MmobClientView   {
         
         
         let view =  WKWebView()
