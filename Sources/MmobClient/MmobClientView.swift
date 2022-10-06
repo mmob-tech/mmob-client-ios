@@ -22,6 +22,8 @@ struct MarketplaceView: UIViewRepresentable {
     public private(set) var postcode: String = "-"
     public private(set) var address_1: String = "-"
     
+    public private(set) var instance_domain: String = "mmob"
+    
     
     func makeUIView(context: Context) -> WKWebView  {
         
@@ -46,7 +48,7 @@ struct MarketplaceView: UIViewRepresentable {
         
         
         // Set marketplace url entry point
-        let url = URL(string: "https://marketplace-ingress.demo.mmob.com/boot")!
+        let url = URL(string: "https://marketplace-ingress.demo." + instance_domain + ".com/boot")!
         
         
         // Configure request
