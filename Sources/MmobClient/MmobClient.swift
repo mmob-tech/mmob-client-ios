@@ -124,12 +124,12 @@ public struct MmobClient {
         return parameters
     }
     
-    public static func getDistribution(mmobDistribution: MmobDistribution) -> MmobClientView {
+    public static func getDistribution(mmobDistribution: MmobDistribution, instanceDomain: String ) -> MmobClientView {
         let view =  WKWebView()
         let configuration = mmobDistribution.configuration
         let customer = mmobDistribution.customer
         
-        let url = getUrl(environment: configuration.environment, suffix: "tpp/distribution/boot")
+        let url = getUrl(environment: configuration.environment, suffix: "tpp/distribution/boot", instanceDomain: instanceDomain)
         
         let parameters = getParameters(customer: customer)
         
@@ -163,7 +163,7 @@ public struct MmobClient {
         return view
     }
     
-    public static func getClient(mmobConfiguration: MmobConfiguration) -> MmobClientView   {
+    public static func getClient(mmobConfiguration: MmobConfiguration, instanceDomain: String) -> MmobClientView   {
         
         
         let view =  WKWebView()
@@ -186,7 +186,7 @@ public struct MmobClient {
         ]
 
         
-        let url = getUrl(environment: company.environment)
+        let url = getUrl(environment: company.environment, instanceDomain: instanceDomain)
         var request = URLRequest(url: url);
         request.httpMethod = "POST";
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
