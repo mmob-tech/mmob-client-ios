@@ -129,7 +129,7 @@ public struct MmobClient {
         let configuration = mmobDistribution.configuration
         let customer = mmobDistribution.customer
         
-        let url = getUrl(environment: configuration.environment, suffix: "tpp/distribution/boot", instanceDomain: instanceDomain)
+        let url = getUrl(environment: configuration.environment, suffix: "tpp/distribution/boot", instanceDomain: instanceDomain ?? "mmob")
         
         let parameters = getParameters(customer: customer)
         
@@ -186,7 +186,7 @@ public struct MmobClient {
         ]
 
         
-        let url = getUrl(environment: company.environment, instanceDomain: instanceDomain)
+        let url = getUrl(environment: company.environment, instanceDomain: instanceDomain ?? "mmob")
         var request = URLRequest(url: url);
         request.httpMethod = "POST";
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
