@@ -8,7 +8,7 @@
 import SwiftUI
 import WebKit
 
-@available(iOS 14.0, *)
+@available(iOS 12.0, *)
 struct MarketplaceView: UIViewRepresentable {
     // broadband | energy
     public private(set) var page: String = "broadband"
