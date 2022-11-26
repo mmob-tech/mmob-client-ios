@@ -78,7 +78,7 @@ public struct MmobConfiguration {
 
 typealias MmobParameters = [String: String?];
 
-public class MmobClient : UIViewController, WKNavigationDelegate {
+public class MmobClient : UIViewController, WKNavigationDelegate, WKUIDelegate {
     public var webView:WKWebView = WKWebView()
     var urlPrefix: String = ""
 
@@ -201,19 +201,26 @@ public class MmobClient : UIViewController, WKNavigationDelegate {
         
         
         self.webView.navigationDelegate = self
+        self.webView.uiDelegate = self
+
         self.webView.load(request)
         return self.webView
     }
     
-    func webView(webView: WKWebView!, createWebViewWithConfiguration configuration: WKWebViewConfiguration!, forNavigationAction navigationAction: WKNavigationAction!, windowFeatures: WKWindowFeatures!) -> WKWebView! {
+    // Handle window.open in the same webView
+    public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
         }
         return nil
     }
     
+    
+    // Open non instance domains in safari rather than the webview
+    // WARNING: Cookies are not shared, so the session will be empty on Safari
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        print("loading url ", navigationAction.request.url!)
+
         let url = navigationAction.request.url!
         
         if ((url.relativeString.hasPrefix(self.urlPrefix)) == true) {
@@ -224,5 +231,6 @@ public class MmobClient : UIViewController, WKNavigationDelegate {
             UIApplication.shared.open(url)
         }
     }
+    
 }
 
