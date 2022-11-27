@@ -79,7 +79,10 @@ public struct MmobConfiguration {
 typealias MmobParameters = [String: String?];
 
 public class MmobClient : UIViewController, WKNavigationDelegate, WKUIDelegate {
+    
     public var webView:WKWebView = WKWebView()
+    public let version = "0.3.0"
+    
     var urlPrefix: String = ""
 
     
