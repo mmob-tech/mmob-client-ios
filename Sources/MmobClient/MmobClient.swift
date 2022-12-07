@@ -6,7 +6,7 @@ import WebKit
 public typealias MmobClientView = WKWebView
 
 public struct MmobCustomerInfo {
-    public init(email: String, first_name: String? = nil, surname: String? = nil, gender: String? = nil, title: String? = nil, building_number: String? = nil, address_1: String? = nil, town_city: String? = nil, postcode: String? = nil, dob: String? = nil) {
+    public init(email: String? = nil, first_name: String? = nil, surname: String? = nil, gender: String? = nil, title: String? = nil, building_number: String? = nil, address_1: String? = nil, town_city: String? = nil, postcode: String? = nil, dob: String? = nil) {
         self.email = email
         self.first_name = first_name
         self.surname = surname
@@ -19,7 +19,7 @@ public struct MmobCustomerInfo {
         self.dob = dob
     }
     
-    var email: String
+    var email: String?
     var first_name: String?
     var surname: String?
     var gender: String?
