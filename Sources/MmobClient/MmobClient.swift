@@ -91,7 +91,7 @@ public class MmobClient : UIViewController, WKNavigationDelegate, WKUIDelegate {
         return bundleID
     }
     
-    func getUrl(environment: String, suffix: String = "boot", instanceDomain: String) {
+    func getUrl(environment: String, instanceDomain: String) {
         // Set client url entry point
         let local_url =  "http://localhost:3100/"
         let dev_url =  "https://client-ingress.dev." + instanceDomain
@@ -135,8 +135,8 @@ public class MmobClient : UIViewController, WKNavigationDelegate, WKUIDelegate {
         let configuration = mmobDistribution.configuration
         let customer = mmobDistribution.customer
         
-        getUrl(environment: configuration.environment, suffix: "tpp/distribution/boot", instanceDomain: instanceDomain)
-        let url = URL(string:self.urlPrefix + "/boot")!
+        getUrl(environment: configuration.environment, instanceDomain: instanceDomain)
+        let url = URL(string:self.urlPrefix + "/tpp/distribution/boot")!
         
         let parameters = getParameters(customer: customer)
         
