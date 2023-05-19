@@ -72,7 +72,6 @@ public struct MmobDistribution {
 
 typealias MmobParameters = [String: String?]
 
-@available(iOS 14.0, *)
 public class MmobClient: UIViewController {
     var urlPrefix = ""
 
@@ -105,7 +104,7 @@ public class MmobClient: UIViewController {
         } catch {
             print(error.localizedDescription)
         }
-        
+
         return MmobView(instanceDomain: instanceDomain, request: request)
     }
 

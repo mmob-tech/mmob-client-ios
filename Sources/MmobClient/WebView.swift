@@ -65,9 +65,8 @@ struct WebView: UIViewRepresentable {
         // Handle navigation requests
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             request = navigationAction.request
-            let url = navigationAction.request.url!
 
-            if let rootDomain = getRootDomain(from: url.absoluteString), rootDomain == instanceDomain {
+            if let rootDomain = getRootDomain(from: request.url!.absoluteString), rootDomain == instanceDomain {
                 isNotInstanceDomain = false
                 decisionHandler(.allow)
             } else {
