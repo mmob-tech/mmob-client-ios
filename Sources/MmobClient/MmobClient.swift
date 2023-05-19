@@ -72,7 +72,7 @@ public struct MmobDistribution {
 
 typealias MmobParameters = [String: String?]
 
-@available(iOS 14.0, *)
+
 public class MmobClient: UIViewController {
     let webView: WKWebView = .init()
     var urlPrefix = ""
@@ -106,7 +106,6 @@ public class MmobClient: UIViewController {
         } catch {
             print(error.localizedDescription)
         }
-
         return MmobView(request: request, instanceDomain: instanceDomain)
     }
 

@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
+
 struct MmobView: View {
+    
     let request: URLRequest
     let instanceDomain: String
     @ObservedObject private var model: WebViewModel = .init()
@@ -17,9 +18,10 @@ struct MmobView: View {
     var body: some View {
         ZStack {
             WebView(request: request, instanceDomain: instanceDomain, model: model, isNotInstanceDomain: $isNotInstanceDomain)
-                .fullScreenCover(isPresented: $isNotInstanceDomain) {
+                .compatibleFullScreen(isPresented: $isNotInstanceDomain, content: {
                     BrowserView(request: request, instanceDomain: instanceDomain, isNotInstanceDomain: $isNotInstanceDomain)
-                }
+                })
+                
         }
     }
 }
@@ -121,5 +123,27 @@ struct FooterView: View {
                 .foregroundColor(Color(hex: "#E2E9EE"))
                 .padding(.bottom, 55)
         )
+    }
+}
+
+
+
+extension View {
+    func compatibleFullScreen<Content: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) -> some View {
+        self.modifier(FullScreenModifier(isPresented: isPresented, builder: content))
+    }
+}
+
+struct FullScreenModifier<V: View>: ViewModifier {
+    let isPresented: Binding<Bool>
+    let builder: () -> V
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 14.0, *) {
+            content.fullScreenCover(isPresented: isPresented, content: builder)
+        } else {
+            content.sheet(isPresented: isPresented, content: builder)
+        }
     }
 }
