@@ -28,9 +28,15 @@ struct BrowserView: View {
     @Binding var isNotInstanceDomain: Bool
 
     var body: some View {
-        VStack {
+        browserView()
+    }
+
+    func browserView() -> some View {
+        let webView = WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+
+        return VStack {
             HeaderView()
-            WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+            webView
             FooterView()
         }
     }

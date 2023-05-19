@@ -10,9 +10,17 @@ import WebKit
 
 struct WebView: UIViewRepresentable {
     let instanceDomain: String
+    private var webView: WKWebView
 
     @Binding var request: URLRequest
     @Binding var isNotInstanceDomain: Bool
+
+    init(instanceDomain: String, request: Binding<URLRequest>, isNotInstanceDomain: Binding<Bool>) {
+        self.instanceDomain = instanceDomain
+        self.webView = WKWebView()
+        self._request = request
+        self._isNotInstanceDomain = isNotInstanceDomain
+    }
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()
@@ -25,6 +33,23 @@ struct WebView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {}
+
+    func title() -> String {
+        return webView.title!
+    }
+
+    func URL() -> String {
+        print("url()", webView.url)
+        return webView.url?.absoluteString ?? ""
+    }
+
+    func goBack() {
+        webView.goBack()
+    }
+
+    func goForward() {
+        webView.goForward()
+    }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
@@ -50,11 +75,6 @@ struct WebView: UIViewRepresentable {
         // WebView finished loading content
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             print("WebView finished loading content")
-//            model.webView = webView
-//            model.title = webView.title!
-//            model.url = getRootDomain(from: webView.url!.absoluteString)!
-//            model.canGoBack = webView.canGoBack
-//            model.canGoForward = webView.canGoForward
         }
 
         // WebView failed to load content with an error
@@ -89,7 +109,7 @@ struct WebView: UIViewRepresentable {
         }
 
         func getRootDomain(from url: String) -> String? {
-            guard let url = URL(string: url),
+            guard let url = Foundation.URL(string: url),
                   let host = url.host
             else {
                 return nil
