@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WebKit
 
 struct MmobView: View {
     let instanceDomain: String
@@ -34,15 +35,18 @@ struct BrowserView: View {
     func browserView() -> some View {
         let webView = WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
 
-        return VStack {
-            HeaderView()
-            webView
-            FooterView()
-        }
+        return
+            VStack {
+                HeaderView(webView: webView)
+                webView
+                FooterView(webView: webView)
+            }
     }
 }
 
 struct HeaderView: View {
+    let webView: WebView
+
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -58,7 +62,7 @@ struct HeaderView: View {
                 .padding(.trailing, 16)
             }
             VStack(spacing: 3) {
-                Text("Example")
+                Text(webView.title())
                     .font(.body)
                     .bold()
                 HStack {
@@ -66,7 +70,7 @@ struct HeaderView: View {
                         .padding(.trailing, -5)
                         .imageScale(.small)
                         .foregroundColor(Color(hex: "#7F8794"))
-                    Text(verbatim: "example.com")
+                    Text(verbatim: webView.URL())
                         .font(.caption)
                         .foregroundColor(Color(hex: "#7F8794"))
                 }
@@ -84,27 +88,29 @@ struct HeaderView: View {
 }
 
 struct FooterView: View {
+    let webView: WebView
+
     var body: some View {
         HStack {
             Button(action: {
-//                model.goBack()
+                webView.goBack()
             }) {
                 Image(systemName: "chevron.left")
-//                    .foregroundColor(canGoBack ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
+                    .foregroundColor(webView.canGoBack() ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
                     .imageScale(.large)
             }
-//            .disabled(!canGoBack)
+//            .disabled(!webView.canGoBack())
 
             Spacer()
 
             Button(action: {
-//                model.goForward()
+                webView.goForward()
             }) {
                 Image(systemName: "chevron.right")
-//                    .foregroundColor(canGoForward ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
+                    .foregroundColor(webView.canGoForwards() ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
                     .imageScale(.large)
             }
-//            .disabled(!canGoForward)
+//            .disabled(!webView.canGoForwards())
         }
         .padding([.leading, .trailing], 16)
         .padding(.top, -16)

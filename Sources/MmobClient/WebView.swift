@@ -23,7 +23,6 @@ struct WebView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = true
@@ -39,8 +38,15 @@ struct WebView: UIViewRepresentable {
     }
 
     func URL() -> String {
-        print("url()", webView.url)
         return webView.url?.absoluteString ?? ""
+    }
+
+    func canGoBack() -> Bool {
+        return webView.canGoBack
+    }
+    
+    func canGoForwards() -> Bool {
+        return webView.canGoForward
     }
 
     func goBack() {
