@@ -1,18 +1,17 @@
 //
 //  MmobView.swift
-//  mmob-tester
 //
-//  Created by Hasseeb Hussain on 11/05/2023.
+//
+//  Created by Hasseeb Hussain on 16/05/2023.
 //
 
 import SwiftUI
-import WebKit
 
 struct MmobView: View {
     let request: URLRequest
     let instanceDomain: String
 
     var body: some View {
-        Text(instanceDomain)
+        WebView(request: request, instanceDomain: instanceDomain)
     }
 }

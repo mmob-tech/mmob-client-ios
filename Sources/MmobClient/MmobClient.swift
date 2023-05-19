@@ -72,10 +72,9 @@ public struct MmobDistribution {
 
 typealias MmobParameters = [String: String?]
 
-public class MmobClient {
-    var urlPrefix: String = ""
-
-    public init() {}
+public class MmobClient: UIViewController {
+    let webView: WKWebView = .init()
+    var urlPrefix = ""
 
     public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: String) -> some View {
         let customer = mmobConfiguration.customer
@@ -110,45 +109,6 @@ public class MmobClient {
         return MmobView(request: request, instanceDomain: instanceDomain)
     }
 
-    public func loadDistribution(mmobConfiguration: MmobDistribution, instanceDomain: String) -> some View {
-        let configuration = mmobConfiguration.configuration
-        let customer = mmobConfiguration.customer
-
-        self.getUrl(environment: configuration.environment, instanceDomain: instanceDomain)
-        let url = URL(string: self.urlPrefix + "/tpp/distribution/boot")!
-
-        let parameters = self.getParameters(customer: customer)
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-        let bootRequestConfiguration = [
-            "distribution_id": configuration.distribution_id,
-            "identifier_type": "ios",
-            "identifier_value": self.getBundleID()
-        ]
-
-        let bootRequest = [
-            "configuration": bootRequestConfiguration,
-            "customer_info": parameters
-        ]
-
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: bootRequest, options: .prettyPrinted)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return MmobView(request: request, instanceDomain: instanceDomain)
-    }
-
-    func getBundleID() -> String {
-        let bundleID = Bundle.main.bundleIdentifier!
-        return bundleID
-    }
-
     func getParameters(customer: MmobCustomerInfo) -> MmobParameters {
         let parameters: MmobParameters = [
             "email": customer.email,
@@ -163,7 +123,6 @@ public class MmobClient {
         return parameters
     }
 
-    // Get client URL entry point
     func getUrl(environment: String, instanceDomain: String) {
         let local_url = "http://localhost:3100/"
         let dev_url = "https://client-ingress.dev." + instanceDomain
@@ -177,7 +136,6 @@ public class MmobClient {
             self.urlPrefix = dev_url
         case "stag":
             self.urlPrefix = stag_url
-
         default:
             self.urlPrefix = prod_url
         }
@@ -185,40 +143,15 @@ public class MmobClient {
 }
 
 //
-// typealias MmobParameters = [String: String?]
-
 // public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
 //    public var webView: WKWebView = .init()
-//
 //    var urlPrefix: String = ""
-
-//    func getBundlerId() -> String {
-//        let bundleID = Bundle.main.bundleIdentifier!
-//        return bundleID
-//    }
 //
-//    func getUrl(environment: String, instanceDomain: String) {
-//        // Set client url entry point
-//        let local_url = "http://localhost:3100/"
-//        let dev_url = "https://client-ingress.dev." + instanceDomain
-//        let stag_url = "https://client-ingress.stag." + instanceDomain
-//        let prod_url = "https://client-ingress.prod." + instanceDomain
+//    public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: String) -> WKWebView {
+//        let customer = mmobConfiguration.customer
+//        let company = mmobConfiguration.configuration
 //
-//        switch environment {
-//        case "local":
-//            self.urlPrefix = local_url
-//        case "dev":
-//            self.urlPrefix = dev_url
-//        case "stag":
-//            self.urlPrefix = stag_url
-//
-//        default:
-//            self.urlPrefix = prod_url
-//        }
-//    }
-
-//    func getParameters(customer: MmobCustomerInfo) -> MmobParameters {
-//        let parameters: MmobParameters = [
+//        let parameters: [String: String?] = [
 //            "email": customer.email,
 //            "first_name": customer.first_name,
 //            "surname": customer.surname,
@@ -226,20 +159,38 @@ public class MmobClient {
 //            "building_number": customer.building_number,
 //            "address_1": customer.address_1,
 //            "town_city": customer.town_city,
-//            "postcode": customer.postcode
+//            "postcode": customer.postcode,
+//            "cp_id": company.cp_id,
+//            "cp_deployment_id": company.integration_id
 //        ]
-//        return parameters
+//
+//        self.getUrl(environment: company.environment, instanceDomain: instanceDomain)
+//        let url = URL(string: self.urlPrefix + "/boot")!
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("application/json", forHTTPHeaderField: "Accept")
+//
+//        do {
+//            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+//
+//        self.webView.navigationDelegate = self
+//        self.webView.uiDelegate = self
+//        self.webView.load(request)
+//
+//        return self.webView
 //    }
-
-//    public func getDistribution(mmobDistribution: MmobDistribution, instanceDomain: String) -> MmobClientView {
-//        let view = WKWebView()
-//        let configuration = mmobDistribution.configuration
-//        let customer = mmobDistribution.customer
+//
+//    public func loadDistribution(mmobConfiguration: MmobDistribution, instanceDomain: String) -> WKWebView {
+//        let configuration = mmobConfiguration.configuration
+//        let customer = mmobConfiguration.customer
+//        let parameters = self.getParameters(customer: customer)
 //
 //        self.getUrl(environment: configuration.environment, instanceDomain: instanceDomain)
 //        let url = URL(string: self.urlPrefix + "/tpp/distribution/boot")!
-//
-//        let parameters = self.getParameters(customer: customer)
 //
 //        var request = URLRequest(url: url)
 //        request.httpMethod = "POST"
@@ -249,7 +200,7 @@ public class MmobClient {
 //        let bootRequestConfiguration = [
 //            "distribution_id": configuration.distribution_id,
 //            "identifier_type": "ios",
-//            "identifier_value": self.getBundlerId()
+//            "identifier_value": self.getBundleID()
 //        ]
 //
 //        let bootRequest = [
@@ -263,63 +214,68 @@ public class MmobClient {
 //            print(error.localizedDescription)
 //        }
 //
-//        view.load(request)
-//        return view
+//        self.webView.navigationDelegate = self
+//        self.webView.uiDelegate = self
+//        self.webView.load(request)
+//
+//        return self.webView
 //    }
 //
-//    public func getClient(mmobConfiguration: MmobConfiguration, instanceDomain: String) -> MmobClientView {
-// let customer = mmobConfiguration.customer
-// let company = mmobConfiguration.configuration
-//
-// let parameters: [String: String?] = [
-//    "email": customer.email,
-//    "first_name": customer.first_name,
-//    "surname": customer.surname,
-//    "title": customer.title,
-//    "building_number": customer.building_number,
-//    "address_1": customer.address_1,
-//    "town_city": customer.town_city,
-//    "postcode": customer.postcode,
-//    "cp_id": company.cp_id,
-//    "cp_deployment_id": company.integration_id
-// ]
-//
-// self.getUrl(environment: company.environment, instanceDomain: instanceDomain)
-// let url = URL(string: self.urlPrefix + "/boot")!
-// var request = URLRequest(url: url)
-// request.httpMethod = "POST"
-// request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-// request.addValue("application/json", forHTTPHeaderField: "Accept")
-//
-// do {
-//    request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-// } catch {
-//    print(error.localizedDescription)
-// }
-//
-// self.webView.navigationDelegate = self
-// self.webView.uiDelegate = self
-//
-// self.webView.load(request)
-// return self.webView
+//    func getBundleID() -> String {
+//        let bundleID = Bundle.main.bundleIdentifier!
+//        return bundleID
 //    }
-
-// Handle window.open in the same webView
+//
+//    func getParameters(customer: MmobCustomerInfo) -> MmobParameters {
+//        let parameters: MmobParameters = [
+//            "email": customer.email,
+//            "first_name": customer.first_name,
+//            "surname": customer.surname,
+//            "title": customer.title,
+//            "building_number": customer.building_number,
+//            "address_1": customer.address_1,
+//            "town_city": customer.town_city,
+//            "postcode": customer.postcode
+//        ]
+//        return parameters
+//    }
+//
+//    func getUrl(environment: String, instanceDomain: String) {
+//        let local_url = "http://localhost:3100/"
+//        let dev_url = "https://client-ingress.dev." + instanceDomain
+//        let stag_url = "https://client-ingress.stag." + instanceDomain
+//        let prod_url = "https://client-ingress.prod." + instanceDomain
+//
+//        switch environment {
+//        case "local":
+//            self.urlPrefix = local_url
+//        case "dev":
+//            self.urlPrefix = dev_url
+//        case "stag":
+//            self.urlPrefix = stag_url
+//        default:
+//            self.urlPrefix = prod_url
+//        }
+//    }
+//
+//    // Delegate methods
 //    public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
 //        if navigationAction.targetFrame == nil {
 //            webView.load(navigationAction.request)
 //        }
 //        return nil
 //    }
-
-// Open non instance domains in safari rather than the webview
-// WARNING: Cookies are not shared, so the session will be empty on Safari
+//
 //    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
 //        let url = navigationAction.request.url!
 //
 //        if (url.relativeString.hasPrefix(self.urlPrefix)) == true {
 //            decisionHandler(.allow)
 //        } else {
+//            // Handle MMOB Browser here
 //            decisionHandler(.cancel)
+//            UIApplication.shared.canOpenURL(url)
+//            UIApplication.shared.open(url)
 //        }
 //    }
+// }
