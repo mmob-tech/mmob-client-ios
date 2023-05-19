@@ -9,11 +9,10 @@ import SwiftUI
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    @ObservedObject var model: WebViewModel
-    @Binding var isInstanceDomain: Bool
-
     let request: URLRequest
     let instanceDomain: String
+    @ObservedObject var model: WebViewModel
+    @Binding var isNotInstanceDomain: Bool
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = model.webView
@@ -28,17 +27,17 @@ struct WebView: UIViewRepresentable {
     func updateUIView(_ uiView: WKWebView, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(instanceDomain: instanceDomain, isInstanceDomain: $isInstanceDomain)
+        Coordinator(instanceDomain: instanceDomain, isNotInstanceDomain: $isNotInstanceDomain)
     }
 
     class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         let instanceDomain: String
-        @Binding var isInstanceDomain: Bool
+        @Binding var isNotInstanceDomain: Bool
         @ObservedObject var model = WebViewModel()
 
-        init(instanceDomain: String, isInstanceDomain: Binding<Bool>) {
+        init(instanceDomain: String, isNotInstanceDomain: Binding<Bool>) {
             self.instanceDomain = instanceDomain
-            self._isInstanceDomain = isInstanceDomain
+            self._isNotInstanceDomain = isNotInstanceDomain
         }
 
         // WebView started loading content
@@ -67,12 +66,17 @@ struct WebView: UIViewRepresentable {
             let url = navigationAction.request.url!
 
             if let rootDomain = getRootDomain(from: url.absoluteString), rootDomain == instanceDomain {
-                isInstanceDomain = true
+                isNotInstanceDomain = false
+                decisionHandler(.allow)
             } else {
-                isInstanceDomain = false
-            }
+                if isNotInstanceDomain {
+                    decisionHandler(.allow)
+                } else {
+                    decisionHandler(.cancel)
+                }
 
-            decisionHandler(.allow)
+                isNotInstanceDomain = true
+            }
         }
 
         // Handle 'window.open' calls

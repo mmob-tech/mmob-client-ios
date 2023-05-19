@@ -72,6 +72,7 @@ public struct MmobDistribution {
 
 typealias MmobParameters = [String: String?]
 
+@available(iOS 14.0, *)
 public class MmobClient: UIViewController {
     let webView: WKWebView = .init()
     var urlPrefix = ""

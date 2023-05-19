@@ -7,15 +7,37 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct MmobView: View {
-    @ObservedObject var model: WebViewModel = .init()
-    @State private var isInstanceDomain: Bool = true
-
     let request: URLRequest
     let instanceDomain: String
+    @ObservedObject private var model: WebViewModel = .init()
+    @State private var isNotInstanceDomain: Bool = false
 
     var body: some View {
-        WebView(model: model, isInstanceDomain: $isInstanceDomain, request: request, instanceDomain: instanceDomain)
+        ZStack {
+            WebView(request: request, instanceDomain: instanceDomain, model: model, isNotInstanceDomain: $isNotInstanceDomain)
+                .fullScreenCover(isPresented: $isNotInstanceDomain) {
+                    BrowserView(request: request, instanceDomain: instanceDomain, isNotInstanceDomain: $isNotInstanceDomain)
+                }
+        }
+    }
+}
+
+struct BrowserView: View {
+    let request: URLRequest
+    let instanceDomain: String
+    @ObservedObject private var model: WebViewModel = .init()
+    @Binding var isNotInstanceDomain: Bool
+
+    let tempRequest: URLRequest = .init(url: URL(string: "https://google.com")!)
+
+    var body: some View {
+        VStack {
+            HeaderView(model: model, title: model.title, subtitle: model.url)
+            WebView(request: tempRequest, instanceDomain: instanceDomain, model: model, isNotInstanceDomain: $isNotInstanceDomain)
+            FooterView(model: model, canGoBack: model.canGoBack, canGoForward: model.canGoForward)
+        }
     }
 }
 
@@ -23,13 +45,14 @@ struct HeaderView: View {
     let model: WebViewModel
     let title: String
     let subtitle: String
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         ZStack {
             HStack {
                 Spacer()
                 Button(action: {
-                    model.goBack()
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "xmark")
                         .foregroundColor(.black)
