@@ -7,46 +7,36 @@
 
 import SwiftUI
 
-
 struct MmobView: View {
-    
-    let request: URLRequest
     let instanceDomain: String
-    @ObservedObject private var model: WebViewModel = .init()
-    @State private var isNotInstanceDomain: Bool = false
+
+    @State var request: URLRequest
+    @State var isNotInstanceDomain: Bool = false
 
     var body: some View {
-        ZStack {
-            WebView(request: request, instanceDomain: instanceDomain, model: model, isNotInstanceDomain: $isNotInstanceDomain)
-                .compatibleFullScreen(isPresented: $isNotInstanceDomain, content: {
-                    BrowserView(request: request, instanceDomain: instanceDomain, isNotInstanceDomain: $isNotInstanceDomain)
-                })
-                
-        }
+        WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+            .compatibleFullScreen(isPresented: $isNotInstanceDomain, content: {
+                BrowserView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+            })
     }
 }
 
 struct BrowserView: View {
-    let request: URLRequest
     let instanceDomain: String
-    @ObservedObject private var model: WebViewModel = .init()
-    @Binding var isNotInstanceDomain: Bool
 
-    let tempRequest: URLRequest = .init(url: URL(string: "https://google.com")!)
+    @Binding var request: URLRequest
+    @Binding var isNotInstanceDomain: Bool
 
     var body: some View {
         VStack {
-            HeaderView(model: model, title: model.title, subtitle: model.url)
-            WebView(request: tempRequest, instanceDomain: instanceDomain, model: model, isNotInstanceDomain: $isNotInstanceDomain)
-            FooterView(model: model, canGoBack: model.canGoBack, canGoForward: model.canGoForward)
+            HeaderView()
+            WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+            FooterView()
         }
     }
 }
 
 struct HeaderView: View {
-    let model: WebViewModel
-    let title: String
-    let subtitle: String
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -62,7 +52,7 @@ struct HeaderView: View {
                 .padding(.trailing, 16)
             }
             VStack(spacing: 3) {
-                Text(model.title)
+                Text("Example")
                     .font(.body)
                     .bold()
                 HStack {
@@ -70,7 +60,7 @@ struct HeaderView: View {
                         .padding(.trailing, -5)
                         .imageScale(.small)
                         .foregroundColor(Color(hex: "#7F8794"))
-                    Text(verbatim: model.url)
+                    Text(verbatim: "example.com")
                         .font(.caption)
                         .foregroundColor(Color(hex: "#7F8794"))
                 }
@@ -88,31 +78,27 @@ struct HeaderView: View {
 }
 
 struct FooterView: View {
-    let model: WebViewModel
-    let canGoBack: Bool
-    let canGoForward: Bool
-
     var body: some View {
         HStack {
             Button(action: {
-                model.goBack()
+//                model.goBack()
             }) {
                 Image(systemName: "chevron.left")
-                    .foregroundColor(canGoBack ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
+//                    .foregroundColor(canGoBack ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
                     .imageScale(.large)
             }
-            .disabled(!canGoBack)
+//            .disabled(!canGoBack)
 
             Spacer()
 
             Button(action: {
-                model.goForward()
+//                model.goForward()
             }) {
                 Image(systemName: "chevron.right")
-                    .foregroundColor(canGoForward ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
+//                    .foregroundColor(canGoForward ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
                     .imageScale(.large)
             }
-            .disabled(!canGoForward)
+//            .disabled(!canGoForward)
         }
         .padding([.leading, .trailing], 16)
         .padding(.top, -16)
@@ -126,11 +112,9 @@ struct FooterView: View {
     }
 }
 
-
-
 extension View {
     func compatibleFullScreen<Content: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.modifier(FullScreenModifier(isPresented: isPresented, builder: content))
+        modifier(FullScreenModifier(isPresented: isPresented, builder: content))
     }
 }
 

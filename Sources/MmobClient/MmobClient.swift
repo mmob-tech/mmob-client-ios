@@ -72,9 +72,8 @@ public struct MmobDistribution {
 
 typealias MmobParameters = [String: String?]
 
-
+@available(iOS 14.0, *)
 public class MmobClient: UIViewController {
-    let webView: WKWebView = .init()
     var urlPrefix = ""
 
     public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: String) -> some View {
@@ -106,21 +105,8 @@ public class MmobClient: UIViewController {
         } catch {
             print(error.localizedDescription)
         }
-        return MmobView(request: request, instanceDomain: instanceDomain)
-    }
-
-    func getParameters(customer: MmobCustomerInfo) -> MmobParameters {
-        let parameters: MmobParameters = [
-            "email": customer.email,
-            "first_name": customer.first_name,
-            "surname": customer.surname,
-            "title": customer.title,
-            "building_number": customer.building_number,
-            "address_1": customer.address_1,
-            "town_city": customer.town_city,
-            "postcode": customer.postcode
-        ]
-        return parameters
+        
+        return MmobView(instanceDomain: instanceDomain, request: request)
     }
 
     func getUrl(environment: String, instanceDomain: String) {
