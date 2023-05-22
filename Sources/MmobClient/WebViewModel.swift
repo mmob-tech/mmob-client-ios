@@ -14,6 +14,4 @@ class WebViewModel: ObservableObject {
     @Published var url = ""
     @Published var canGoBack: Bool = false
     @Published var canGoForward: Bool = false
-    
-    
 }
