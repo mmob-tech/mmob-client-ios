@@ -7,6 +7,80 @@
 
 import Foundation
 
+public struct MmobCustomerInfo {
+    var email: String?
+    var first_name: String?
+    var surname: String?
+    var gender: String?
+    var title: String?
+    var building_number: String?
+    var address_1: String?
+    var town_city: String?
+    var postcode: String?
+    var dob: String?
+
+    public init(email: String? = nil, first_name: String? = nil, surname: String? = nil, gender: String? = nil, title: String? = nil, building_number: String? = nil, address_1: String? = nil, town_city: String? = nil, postcode: String? = nil, dob: String? = nil) {
+        self.email = email
+        self.first_name = first_name
+        self.surname = surname
+        self.gender = gender
+        self.title = title
+        self.building_number = building_number
+        self.address_1 = address_1
+        self.town_city = town_city
+        self.postcode = postcode
+        self.dob = dob
+    }
+}
+
+public enum InstanceDomain {
+    case mmob, efnetwork
+}
+
+public struct MmobIntegrationConfiguration {
+    var cp_id: String
+    var integration_id: String
+    var environment: String
+
+    public init(cp_id: String, integration_id: String, environment: String = "production") {
+        self.cp_id = cp_id
+        self.integration_id = integration_id
+        self.environment = environment
+    }
+}
+
+public struct MmobDistributionConfiguration {
+    var distribution_id: String
+    var environment: String
+
+    public init(distribution_id: String, environment: String = "production") {
+        self.distribution_id = distribution_id
+        self.environment = environment
+    }
+}
+
+public struct MmobIntegration {
+    var configuration: MmobIntegrationConfiguration
+    var customer: MmobCustomerInfo
+
+    public init(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) {
+        self.configuration = configuration
+        self.customer = customer
+    }
+}
+
+public struct MmobDistribution {
+    var configuration: MmobDistributionConfiguration
+    var customer: MmobCustomerInfo
+
+    public init(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) {
+        self.configuration = configuration
+        self.customer = customer
+    }
+}
+
+typealias MmobParameters = [String: String?]
+
 class MmobClientHelper {
     func getBootUrl(environment: String, instanceDomain: String) -> String {
         switch environment {
@@ -51,6 +125,15 @@ class MmobClientHelper {
         }
 
         return parsedUrl.host
+    }
+
+    func getInstanceDomain(domain: InstanceDomain) -> String {
+        switch domain {
+        case InstanceDomain.efnetwork:
+            return "ef-network.com"
+        default:
+            return "mmob.com"
+        }
     }
 
     func getIntegrationParameters(company: MmobIntegrationConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
