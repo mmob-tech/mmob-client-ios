@@ -11,13 +11,14 @@ import WebKit
 struct MmobView: View {
     let instanceDomain: String
 
+    @ObservedObject var model: WebViewModel = .init()
     @State var request: URLRequest
     @State var isNotInstanceDomain: Bool = false
 
     var body: some View {
-        WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+        WebView(instanceDomain: instanceDomain, model: model, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
             .compatibleFullScreen(isPresented: $isNotInstanceDomain, content: {
-                BrowserView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+                BrowserView(instanceDomain: instanceDomain, model: model, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
             })
     }
 }
@@ -25,6 +26,7 @@ struct MmobView: View {
 struct BrowserView: View {
     let instanceDomain: String
 
+    @ObservedObject var model: WebViewModel
     @Binding var request: URLRequest
     @Binding var isNotInstanceDomain: Bool
 
@@ -33,19 +35,20 @@ struct BrowserView: View {
     }
 
     func browserView() -> some View {
-        let webView = WebView(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+        let webView = WebView(instanceDomain: instanceDomain, model: model, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
 
         return
             VStack {
-                HeaderView(webView: webView)
+                HeaderView(title: model.title, subtitle: model.url)
                 webView
-                FooterView(webView: webView)
+                FooterView(model: model, canGoBack: model.canGoBack, canGoForward: model.canGoForward)
             }
     }
 }
 
 struct HeaderView: View {
-    let webView: WebView
+    let title: String
+    let subtitle: String
 
     @Environment(\.presentationMode) var presentationMode
 
@@ -62,7 +65,7 @@ struct HeaderView: View {
                 .padding(.trailing, 16)
             }
             VStack(spacing: 3) {
-                Text(webView.title())
+                Text(title)
                     .font(.body)
                     .bold()
                 HStack {
@@ -70,7 +73,7 @@ struct HeaderView: View {
                         .padding(.trailing, -5)
                         .imageScale(.small)
                         .foregroundColor(Color(hex: "#7F8794"))
-                    Text(verbatim: webView.URL())
+                    Text(verbatim: subtitle)
                         .font(.caption)
                         .foregroundColor(Color(hex: "#7F8794"))
                 }
@@ -88,29 +91,31 @@ struct HeaderView: View {
 }
 
 struct FooterView: View {
-    let webView: WebView
+    let model: WebViewModel
+    let canGoBack: Bool
+    let canGoForward: Bool
 
     var body: some View {
         HStack {
             Button(action: {
-                webView.goBack()
+                model.webView.goBack()
             }) {
                 Image(systemName: "chevron.left")
-                    .foregroundColor(webView.canGoBack() ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
+                    .foregroundColor(canGoBack ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
                     .imageScale(.large)
             }
-//            .disabled(!webView.canGoBack())
+            .disabled(!canGoBack)
 
             Spacer()
 
             Button(action: {
-                webView.goForward()
+                model.webView.goForward()
             }) {
                 Image(systemName: "chevron.right")
-                    .foregroundColor(webView.canGoForwards() ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
+                    .foregroundColor(canGoForward ? Color(hex: "#7F8794") : Color(hex: "#CED4DD"))
                     .imageScale(.large)
             }
-//            .disabled(!webView.canGoForwards())
+            .disabled(!canGoForward)
         }
         .padding([.leading, .trailing], 16)
         .padding(.top, -16)

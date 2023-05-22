@@ -10,65 +10,46 @@ import WebKit
 
 struct WebView: UIViewRepresentable {
     let instanceDomain: String
-    private var webView: WKWebView
 
+    @ObservedObject var model: WebViewModel
     @Binding var request: URLRequest
     @Binding var isNotInstanceDomain: Bool
 
-    init(instanceDomain: String, request: Binding<URLRequest>, isNotInstanceDomain: Binding<Bool>) {
+    init(instanceDomain: String, model: WebViewModel, request: Binding<URLRequest>, isNotInstanceDomain: Binding<Bool>) {
         self.instanceDomain = instanceDomain
-        self.webView = WKWebView()
+        self.model = model
         self._request = request
         self._isNotInstanceDomain = isNotInstanceDomain
     }
 
     func makeUIView(context: Context) -> WKWebView {
-        webView.navigationDelegate = context.coordinator
-        webView.uiDelegate = context.coordinator
-        webView.allowsBackForwardNavigationGestures = true
-        webView.load(request)
+        let webView = WKWebView()
+        
+        model.webView = webView
+        model.webView.navigationDelegate = context.coordinator
+        model.webView.uiDelegate = context.coordinator
+        model.webView.allowsBackForwardNavigationGestures = true
+        model.webView.load(request)
 
-        return webView
+        return model.webView
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {}
 
-    func title() -> String {
-        return webView.title!
-    }
-
-    func URL() -> String {
-        return webView.url?.absoluteString ?? ""
-    }
-
-    func canGoBack() -> Bool {
-        return webView.canGoBack
-    }
-    
-    func canGoForwards() -> Bool {
-        return webView.canGoForward
-    }
-
-    func goBack() {
-        webView.goBack()
-    }
-
-    func goForward() {
-        webView.goForward()
-    }
-
     func makeCoordinator() -> Coordinator {
-        Coordinator(instanceDomain: instanceDomain, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
+        Coordinator(instanceDomain: instanceDomain, model: model, request: $request, isNotInstanceDomain: $isNotInstanceDomain)
     }
 
     class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         let instanceDomain: String
 
+        @ObservedObject var model: WebViewModel
         @Binding var request: URLRequest
         @Binding var isNotInstanceDomain: Bool
 
-        init(instanceDomain: String, request: Binding<URLRequest>, isNotInstanceDomain: Binding<Bool>) {
+        init(instanceDomain: String, model: WebViewModel, request: Binding<URLRequest>, isNotInstanceDomain: Binding<Bool>) {
             self.instanceDomain = instanceDomain
+            self.model = model
             self._request = request
             self._isNotInstanceDomain = isNotInstanceDomain
         }
@@ -81,6 +62,10 @@ struct WebView: UIViewRepresentable {
         // WebView finished loading content
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             print("WebView finished loading content")
+            model.title = webView.title!
+            model.url = webView.url!.absoluteString
+            model.canGoBack = webView.canGoBack
+            model.canGoForward = webView.canGoForward
         }
 
         // WebView failed to load content with an error
