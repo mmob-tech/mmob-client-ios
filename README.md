@@ -1,34 +1,38 @@
-# MmobClient
+# MMOB's iOS Client
 
-Since version 0.3.0, the `MmobClient` has been secured to only allow views owned by `mmob` or its distributors. The implementation has suffered some breaking changes.
+The MMOB iOS Client works across multiple iOS versions from iOS 12.0 -> iOS 16.*
 
-To declare a new mmob client, follow the example below:
+## Instructions to implement
+
+### MmobViewController.swift
 
 ```swift
-
 //
-//  MarketplaceView.swift
-//  EfHubIOs14
+//  MmobViewController.swift
 //
 
-import SwiftUI
 import MmobClient
+import UIKit
+import WebKit
 
-struct MarketplaceView: UIViewRepresentable {
+class MmobViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
+    var webView: MmobClientView!
     let client = MmobClient()
-    func updateUIView(_ uiView: MmobClientView, context: Context) {
-        print("update UI")
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
 
-    func makeUIView(context: Context) -> MmobClientView  {
+    override func loadView() {
+        super.loadView()
+        view = getMarketplace()
+    }
 
-        let configuration = MmobConfiguration(
-            configuration: MmobCompanyConfiguration(
-                cp_id: "cp_id",
-                integration_id: "cpd_id",
-                environment: "stag"
-
+    func getMarketplace() -> MmobClientView {
+        let configuration = MmobIntegration(
+            configuration: MmobIntegrationConfiguration(
+                cp_id: "CP_ID_HERE",
+                integration_id: "YOUR_CP_DEPLOYMENT_ID_HERE",
             ),
             customer: MmobCustomerInfo(
                 email: "john.smith@example.com",
@@ -42,11 +46,50 @@ struct MarketplaceView: UIViewRepresentable {
             )
         )
 
+        return client.loadIntegration(mmobConfiguration: configuration)
+    }
+}
+```
 
-        return client.getClient(mmobConfiguration: configuration, instanceDomain:"ef-network.com")
+## Instructions to implement using SwiftUI
 
+If you plan on using our client through the SwiftUI framework you will need to follow some extra steps. Once you have created the above `MmobViewController.swift` file follow below
+
+### MmobView.swift
+
+```swift
+//
+//  MmobView.swift
+//
+
+import SwiftUI
+
+struct MmobView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> MmobViewController {
+        return MmobViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: MmobViewController, context: Context) {
+        // Updates the state of the specified view controller with new information from SwiftUI.
+    }
+}
+```
+
+### ContentView.swift
+
+```swift
+//
+//  ContentView.swift
+//
+
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        MmobView()
     }
 }
 
-
 ```
+
+
