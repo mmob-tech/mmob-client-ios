@@ -34,7 +34,7 @@ public struct MmobCustomerInfo {
 }
 
 public enum InstanceDomain {
-    case mmob, efnetwork
+    case MMOB, EFNETWORK
 }
 
 public struct MmobIntegrationConfiguration {
@@ -129,7 +129,7 @@ class MmobClientHelper {
 
     func getInstanceDomain(domain: InstanceDomain) -> String {
         switch domain {
-        case InstanceDomain.efnetwork:
+        case InstanceDomain.EFNETWORK:
             return "ef-network.com"
         default:
             return "mmob.com"

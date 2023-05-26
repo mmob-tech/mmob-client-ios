@@ -9,7 +9,7 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
     var instanceURL: String!
     var webView = WKWebView()
 
-    public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: InstanceDomain) -> MmobClientView {
+    public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: InstanceDomain = InstanceDomain.MMOB) -> MmobClientView {
         let customer = mmobConfiguration.customer
         let company = mmobConfiguration.configuration
         let parameters = self.helper.getIntegrationParameters(
@@ -19,7 +19,7 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let instanceDomainString = self.helper.getInstanceDomain(
             domain: instanceDomain
         )
-        instanceURL = self.helper.getBootUrl(environment: company.environment, instanceDomain: instanceDomainString)
+        self.instanceURL = self.helper.getBootUrl(environment: company.environment, instanceDomain: instanceDomainString)
         let url = URL(
             string: self.helper.getBootUrl(
                 environment: company.environment, instanceDomain: instanceDomainString
@@ -91,11 +91,10 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
-
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
         } else {
-            loadExternalURL(url: navigationAction.request.url!)
+            self.loadExternalURL(url: navigationAction.request.url!)
         }
         return nil
     }
@@ -112,12 +111,12 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
             decisionHandler(.allow)
         } else {
             decisionHandler(.cancel)
-            loadExternalURL(url: url)
+            self.loadExternalURL(url: url)
         }
     }
 
     func loadExternalURL(url: URL) {
-        let topVC = topMostController()
+        let topVC = self.topMostController()
         let storyboard = UIStoryboard(name: "BrowserView", bundle: Bundle.module)
         let browserView = storyboard.instantiateViewController(withIdentifier: "BrowserViewBoard") as! BrowserView
         browserView.modalPresentationStyle = .fullScreen
