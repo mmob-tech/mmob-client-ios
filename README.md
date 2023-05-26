@@ -31,7 +31,7 @@ class MmobViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     func getMarketplace() -> MmobClientView {
         let configuration = MmobIntegration(
             configuration: MmobIntegrationConfiguration(
-                cp_id: "CP_ID_HERE",
+                cp_id: "YOUR_CP_ID_HERE",
                 integration_id: "YOUR_CP_DEPLOYMENT_ID_HERE",
             ),
             customer: MmobCustomerInfo(
