@@ -107,7 +107,11 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         decisionHandler: (WKNavigationActionPolicy) -> Void
     ) {
         let url = navigationAction.request.url!
-        if (url.relativeString.hasPrefix(self.instanceURL)) == true {
+        let urlString = url.absoluteString
+        let isInstanceDomain = urlString.hasPrefix(self.instanceURL)
+        let isAffiliateRedirect = self.helper.containsAffiliateRedirect(in: urlString)
+
+        if isInstanceDomain && !isAffiliateRedirect {
             decisionHandler(.allow)
         } else {
             decisionHandler(.cancel)

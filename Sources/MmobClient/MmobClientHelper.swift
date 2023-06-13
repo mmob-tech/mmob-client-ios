@@ -82,6 +82,10 @@ public struct MmobDistribution {
 typealias MmobParameters = [String: String?]
 
 class MmobClientHelper {
+    func containsAffiliateRedirect(in urlPath: String) -> Bool {
+        return urlPath.contains("affiliate-redirect")
+    }
+
     func getBootUrl(environment: String, instanceDomain: String) -> String {
         switch environment {
         case "local":
