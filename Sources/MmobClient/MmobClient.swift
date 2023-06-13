@@ -111,7 +111,7 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let isInstanceDomain = urlString.hasPrefix(self.instanceURL)
         let isAffiliateRedirect = self.helper.containsAffiliateRedirect(in: urlString)
 
-        if isInstanceDomain == true && isAffiliateRedirect == false {
+        if isInstanceDomain && isAffiliateRedirect == false {
             decisionHandler(.allow)
         } else {
             decisionHandler(.cancel)
