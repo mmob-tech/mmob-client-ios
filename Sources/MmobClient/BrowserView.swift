@@ -45,7 +45,12 @@ public class BrowserView: UIViewController, WKNavigationDelegate {
         }
         updateState()
         if sender.view!.tag == buttonClose.tag {
-            dismiss(animated: true, completion: nil)
+            if let parentViewController = parent {
+                willMove(toParent: nil)
+                view.removeFromSuperview()
+                removeFromParent()
+                parentViewController.view.setNeedsLayout()
+            }
         }
     }
 
