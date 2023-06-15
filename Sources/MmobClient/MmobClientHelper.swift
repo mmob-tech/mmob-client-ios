@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 public struct MmobCustomerInfo {
     var email: String?
@@ -79,32 +80,34 @@ public struct MmobDistribution {
     }
 }
 
-typealias MmobParameters = [String: String?]
+typealias MmobParameters = [String: Any?]
 
 class MmobClientHelper {
     func containsAffiliateRedirect(in urlPath: String) -> Bool {
         return urlPath.contains("affiliate-redirect")
     }
 
-    func getBootUrl(environment: String, instanceDomain: String) -> String {
+    func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
+        let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
+
         switch environment {
         case "local":
-            return "http://localhost:3100/"
+            return URL(string: "http://localhost:3100/")!
         case "dev":
-            return "https://client-ingress.dev." + instanceDomain
+            return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
         case "stag":
-            return "https://client-ingress.stag." + instanceDomain
+            return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
         default:
-            return "https://client-ingress.prod." + instanceDomain
+            return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
         }
     }
 
-    func getBundleID() -> String {
+    private func getBundleID() -> String {
         let bundleID = Bundle.main.bundleIdentifier!
         return bundleID
     }
 
-    func getDistributionParameters(customer: MmobCustomerInfo) -> MmobParameters {
+    func getDistributionParameters(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
         let parameters: MmobParameters = [
             "email": customer.email,
             "first_name": customer.first_name,
@@ -113,7 +116,12 @@ class MmobClientHelper {
             "building_number": customer.building_number,
             "address_1": customer.address_1,
             "town_city": customer.town_city,
-            "postcode": customer.postcode
+            "postcode": customer.postcode,
+            "configuration": [
+                "distribution_id": configuration.distribution_id,
+                "identifier_type": "ios",
+                "identifier_value": getBundleID()
+            ]
         ]
 
         return parameters
@@ -131,8 +139,8 @@ class MmobClientHelper {
         return parsedUrl.host
     }
 
-    func getInstanceDomain(domain: InstanceDomain) -> String {
-        switch domain {
+    func getInstanceDomain(instanceDomain: InstanceDomain) -> String {
+        switch instanceDomain {
         case InstanceDomain.EFNETWORK:
             return "ef-network.com"
         default:
@@ -140,7 +148,7 @@ class MmobClientHelper {
         }
     }
 
-    func getIntegrationParameters(company: MmobIntegrationConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
+    func getIntegrationParameters(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
         let parameters: [String: String?] = [
             "email": customer.email,
             "first_name": customer.first_name,
@@ -150,27 +158,50 @@ class MmobClientHelper {
             "address_1": customer.address_1,
             "town_city": customer.town_city,
             "postcode": customer.postcode,
-            "cp_id": company.cp_id,
-            "cp_deployment_id": company.integration_id
+            "cp_id": configuration.cp_id,
+            "cp_deployment_id": configuration.integration_id
         ]
 
         return parameters
     }
 
-    func getRootDomain(from url: String) -> String? {
-        guard let url = Foundation.URL(string: url),
-              let host = url.host
-        else {
+    func getRequest(url: URL, parameters: MmobParameters) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            print(error.localizedDescription)
+        }
+
+        return request
+    }
+
+    func getRootDomain(from uri: URL) -> String? {
+        guard let host = uri.host else {
             return nil
         }
 
-        var components = host.components(separatedBy: ".")
+        let components = host.components(separatedBy: ".")
 
-        // Remove subdomains if present
-        while components.count > 2 {
-            components.removeFirst()
+        guard components.count >= 2 else {
+            return nil
         }
 
-        return components.joined(separator: ".")
+        let rootDomain = components[components.count - 2] + "." + components[components.count - 1]
+
+        return rootDomain
+    }
+
+    // https://stackoverflow.com/a/58622251
+    func getTopMostController() -> UIViewController {
+        var topController: UIViewController = UIApplication.shared.keyWindow!.rootViewController!
+        while topController.presentedViewController != nil {
+            topController = topController.presentedViewController!
+        }
+        return topController
     }
 }
