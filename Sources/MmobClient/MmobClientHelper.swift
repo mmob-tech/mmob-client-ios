@@ -42,9 +42,9 @@ public struct MmobIntegrationConfiguration {
     var cp_id: String
     var integration_id: String
     var environment: String
-    var locale: String = "en-GB"
+    var locale: String
 
-    public init(cp_id: String, integration_id: String, environment: String = "production") {
+    public init(cp_id: String, integration_id: String, environment: String = "production", locale: String = "en-GB") {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
