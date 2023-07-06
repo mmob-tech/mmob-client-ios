@@ -1,6 +1,6 @@
 # MMOB iOS Client 📱
 
-The MMOB iOS Client works across multiple iOS versions from **iOS 12.0** to **iOS 16.\***
+The MMOB iOS Client works across multiple iOS versions from **iOS 12.0** to **iOS 16.***
 
 ## Instructions to implement
 
