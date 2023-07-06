@@ -55,10 +55,12 @@ public struct MmobIntegrationConfiguration {
 public struct MmobDistributionConfiguration {
     var distribution_id: String
     var environment: String
+    var locale: String
 
-    public init(distribution_id: String, environment: String = "production") {
+    public init(distribution_id: String, environment: String = "production", locale: String = "en_GB") {
         self.distribution_id = distribution_id
         self.environment = environment
+        self.locale = locale
     }
 }
 
