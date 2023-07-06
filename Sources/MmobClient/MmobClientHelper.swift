@@ -42,11 +42,13 @@ public struct MmobIntegrationConfiguration {
     var cp_id: String
     var integration_id: String
     var environment: String
+    var locale: String = "en-GB"
 
     public init(cp_id: String, integration_id: String, environment: String = "production") {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
+        self.locale = locale
     }
 }
 
@@ -121,6 +123,7 @@ class MmobClientHelper {
                 "distribution_id": configuration.distribution_id,
                 "identifier_type": "ios",
                 "identifier_value": getBundleID()
+                "locale": configuration.locale
             ]
         ]
 
@@ -159,7 +162,8 @@ class MmobClientHelper {
             "town_city": customer.town_city,
             "postcode": customer.postcode,
             "cp_id": configuration.cp_id,
-            "cp_deployment_id": configuration.integration_id
+            "cp_deployment_id": configuration.integration_id,
+            "locale": configuration.locale
         ]
 
         return parameters
