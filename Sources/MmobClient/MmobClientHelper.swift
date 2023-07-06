@@ -96,7 +96,7 @@ class MmobClientHelper {
 
         switch environment {
         case "local":
-            return URL(string: "http://localhost:3100/")!
+            return URL(string: "http://localhost:3100/\(suffix)")!
         case "dev":
             return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
         case "stag":
@@ -124,7 +124,7 @@ class MmobClientHelper {
             "configuration": [
                 "distribution_id": configuration.distribution_id,
                 "identifier_type": "ios",
-                "identifier_value": getBundleID()
+                "identifier_value": getBundleID(),
                 "locale": configuration.locale
             ]
         ]
