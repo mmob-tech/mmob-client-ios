@@ -33,7 +33,7 @@ class MmobViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             configuration: MmobIntegrationConfiguration(
                 cp_id: "YOUR_CP_ID_HERE",
                 integration_id: "YOUR_CP_DEPLOYMENT_ID_HERE",
-                locale: "en-GB"
+                locale: "en_GB"
             ),
             customer: MmobCustomerInfo(
                 email: "john.smith@example.com",
