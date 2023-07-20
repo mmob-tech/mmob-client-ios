@@ -218,32 +218,25 @@ class MmobClientHelper {
 
     func setWebViewTitle(webViewTitle: UILabel, title: String, url: String) {
         if url.hasPrefix("https://") {
-            if let image = UIImage(named: "lock.fill") {
-                let color = UIColor.red // Replace 'red' with your desired color
+            let image = UIImage(named: "lock.fill")
 
-                // Apply the color tint to the image
-                let coloredImage = image.withRenderingMode(.alwaysTemplate)
-
-                // Create an image view to display the colored image (for demonstration purposes)
-                let imageView = UIImageView(image: coloredImage)
-
-                // Set the desired color to the image view's tint color
-                imageView.tintColor = color
-
-                // Now, use 'image' to create NSTextAttachment
-                let imageAttachment = NSTextAttachment()
-                imageAttachment.image = image
-
-                let imageSize = CGSize(width: 12, height: 12)
-                imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
-
-                let attributedString = NSMutableAttributedString(string: "")
-                let imageAttributedString = NSAttributedString(attachment: imageAttachment)
-                attributedString.append(imageAttributedString)
-                attributedString.append(NSAttributedString(string: " \(title)"))
-
-                webViewTitle.attributedText = attributedString
+            if #available(iOS 13.0, *) {
+                image!.withTintColor(UIColor(named: "Grey4")!)
             }
+
+            // Now, use 'image' to create NSTextAttachment
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = image
+
+            let imageSize = CGSize(width: 12, height: 12)
+            imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
+
+            let attributedString = NSMutableAttributedString(string: "")
+            let imageAttributedString = NSAttributedString(attachment: imageAttachment)
+            attributedString.append(imageAttributedString)
+            attributedString.append(NSAttributedString(string: " \(title)"))
+
+            webViewTitle.attributedText = attributedString
         } else {
             webViewTitle.text = title
         }
