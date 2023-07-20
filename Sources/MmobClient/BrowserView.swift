@@ -92,7 +92,7 @@ public class BrowserView: UIViewController, WKNavigationDelegate {
 
             let imageOffsetY: CGFloat = 0.0
             let imageOffsetX: CGFloat = 0.0
-            imageAttachment.bounds = CGRect(x: imageOffsetX, y: imageOffsetY, width: imageAttachment.image!.size.width, height: imageAttachment.image!.size.height)
+//            imageAttachment.bounds = CGRect(x: imageOffsetX, y: imageOffsetY, width: imageAttachment.image!.size.width, height: imageAttachment.image!.size.height)
             let attachmentString = NSAttributedString(attachment: imageAttachment)
             completeText.append(attachmentString)
         }
