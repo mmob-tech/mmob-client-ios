@@ -91,21 +91,6 @@ class MmobClientHelper {
         return urlPath.contains("affiliate-redirect")
     }
 
-    func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
-        let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
-
-        switch environment {
-        case "local":
-            return URL(string: "http://localhost:3100/\(suffix)")!
-        case "dev":
-            return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
-        case "stag":
-            return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
-        default:
-            return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
-        }
-    }
-
     private func getBundleID() -> String {
         let bundleID = Bundle.main.bundleIdentifier!
         return bundleID
@@ -200,6 +185,21 @@ class MmobClientHelper {
         let rootDomain = components[components.count - 2] + "." + components[components.count - 1]
 
         return rootDomain
+    }
+
+    func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
+        let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
+
+        switch environment {
+        case "local":
+            return URL(string: "http://localhost:3100/\(suffix)")!
+        case "dev":
+            return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
+        case "stag":
+            return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
+        default:
+            return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
+        }
     }
 
     // https://stackoverflow.com/a/58622251
