@@ -23,17 +23,20 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7yF-Ep-mLD" userLabel="Header">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
                                         <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="xmark" translatesAutoresizingMaskIntoConstraints="NO" id="8dJ-gP-fvi">
+                                                <rect key="frame" x="8" y="8" width="274.66666666666669" height="34"/>
+                                            </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Lgr-wy-1Np" userLabel="InfoView">
-                                                <rect key="frame" x="8" y="8" width="377" height="34"/>
+                                                <rect key="frame" x="290.66666666666669" y="8" width="94.333333333333314" height="34"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2l5-y7-0U4">
-                                                        <rect key="frame" x="0.0" y="0.0" width="377" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="94.333333333333329" height="17"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Loading webpage..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXq-WI-SCK">
-                                                        <rect key="frame" x="0.0" y="17" width="377" height="17"/>
+                                                        <rect key="frame" x="0.0" y="17" width="94.333333333333329" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -61,17 +64,11 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="V8p-HW-sCv" userLabel="Footer">
                                         <rect key="frame" x="0.0" y="660" width="393" height="50"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.left" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="BdQ-Bf-BGe" userLabel="BackButton">
-                                                <rect key="frame" x="8" y="9.9999999999999982" width="26" height="30.333333333333329"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="26" id="UJw-AS-coO"/>
-                                                </constraints>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.left" translatesAutoresizingMaskIntoConstraints="NO" id="NyJ-4K-jpu">
+                                                <rect key="frame" x="8" y="8" width="5" height="34"/>
                                             </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pbt-Mk-mYN" userLabel="ForwardButton">
-                                                <rect key="frame" x="359" y="9.9999999999999982" width="26" height="30.333333333333329"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="26" id="0Sn-Vg-UT6"/>
-                                                </constraints>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.right" translatesAutoresizingMaskIntoConstraints="NO" id="mgl-Uw-Vlb">
+                                                <rect key="frame" x="380" y="8" width="5" height="34"/>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -95,8 +92,9 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="buttonBack" destination="BdQ-Bf-BGe" id="Wan-Sl-V3V"/>
-                        <outlet property="buttonForward" destination="pbt-Mk-mYN" id="dnI-2i-cQj"/>
+                        <outlet property="buttonBack" destination="NyJ-4K-jpu" id="2Pr-Uy-RlF"/>
+                        <outlet property="buttonClose" destination="8dJ-gP-fvi" id="eKs-Dx-EiN"/>
+                        <outlet property="buttonForward" destination="mgl-Uw-Vlb" id="KY6-oR-imN"/>
                         <outlet property="textDomain" destination="2l5-y7-0U4" id="nI7-GO-yhp"/>
                         <outlet property="textURL" destination="cXq-WI-SCK" id="AIS-vL-YAU"/>
                         <outlet property="webView" destination="MsV-Ve-zve" id="HQe-KR-9Bb"/>
@@ -108,8 +106,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="chevron.left" catalog="system" width="97" height="128"/>
-        <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <image name="chevron.left" width="5" height="9"/>
+        <image name="chevron.right" width="5" height="9"/>
+        <image name="xmark" width="8" height="8"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
