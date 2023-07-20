@@ -24,19 +24,22 @@
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="xmark" translatesAutoresizingMaskIntoConstraints="NO" id="8dJ-gP-fvi">
-                                                <rect key="frame" x="8" y="8" width="274.66666666666669" height="34"/>
+                                                <rect key="frame" x="8" y="8" width="16" height="34"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="kFD-Dc-mgD"/>
+                                                </constraints>
                                             </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Lgr-wy-1Np" userLabel="InfoView">
-                                                <rect key="frame" x="290.66666666666669" y="8" width="94.333333333333314" height="34"/>
+                                                <rect key="frame" x="32" y="8" width="329" height="34"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2l5-y7-0U4">
-                                                        <rect key="frame" x="0.0" y="0.0" width="94.333333333333329" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="329" height="17"/>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Loading webpage..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXq-WI-SCK">
-                                                        <rect key="frame" x="0.0" y="17" width="94.333333333333329" height="17"/>
+                                                        <rect key="frame" x="0.0" y="17" width="329" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -47,6 +50,12 @@
                                                     <constraint firstItem="2l5-y7-0U4" firstAttribute="centerX" secondItem="Lgr-wy-1Np" secondAttribute="centerX" id="W58-e7-6Gx"/>
                                                 </constraints>
                                             </stackView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="adT-Z4-LOf">
+                                                <rect key="frame" x="369" y="8" width="16" height="34"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="06b-in-NGe"/>
+                                                </constraints>
+                                            </imageView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="TQF-rk-8nY"/>
@@ -65,16 +74,22 @@
                                         <rect key="frame" x="0.0" y="660" width="393" height="50"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.left" translatesAutoresizingMaskIntoConstraints="NO" id="NyJ-4K-jpu">
-                                                <rect key="frame" x="8" y="8" width="5" height="34"/>
+                                                <rect key="frame" x="16" y="16" width="16" height="18"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="jIG-G5-U8L"/>
+                                                </constraints>
                                             </imageView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.right" translatesAutoresizingMaskIntoConstraints="NO" id="mgl-Uw-Vlb">
-                                                <rect key="frame" x="380" y="8" width="5" height="34"/>
+                                                <rect key="frame" x="361" y="16" width="16" height="18"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="Sz8-AW-Yhp"/>
+                                                </constraints>
                                             </imageView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="W8a-Cg-W5A"/>
                                         </constraints>
-                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        <edgeInsets key="layoutMargins" top="16" left="16" bottom="16" right="16"/>
                                     </stackView>
                                 </subviews>
                             </stackView>
@@ -95,9 +110,9 @@
                         <outlet property="buttonBack" destination="NyJ-4K-jpu" id="2Pr-Uy-RlF"/>
                         <outlet property="buttonClose" destination="8dJ-gP-fvi" id="eKs-Dx-EiN"/>
                         <outlet property="buttonForward" destination="mgl-Uw-Vlb" id="KY6-oR-imN"/>
-                        <outlet property="textDomain" destination="2l5-y7-0U4" id="nI7-GO-yhp"/>
-                        <outlet property="textURL" destination="cXq-WI-SCK" id="AIS-vL-YAU"/>
                         <outlet property="webView" destination="MsV-Ve-zve" id="HQe-KR-9Bb"/>
+                        <outlet property="webViewSubTitle" destination="cXq-WI-SCK" id="AIS-vL-YAU"/>
+                        <outlet property="webViewTitle" destination="2l5-y7-0U4" id="nI7-GO-yhp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

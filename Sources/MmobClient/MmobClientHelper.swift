@@ -210,4 +210,28 @@ class MmobClientHelper {
         }
         return topController
     }
+
+    func setDefaultWebViewValues(title: UILabel, subtitle: UILabel) {
+        title.text = "Loading..."
+        subtitle.text = "Loading webpage..."
+    }
+
+    func setWebViewTitle(webViewTitle: UILabel, title: String, url: String) {
+        if url.hasPrefix("https://") {
+            let image = UIImage(named: "lock.fill")
+
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = image
+
+            let imageSize = CGSize(width: 12, height: 12)
+            imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
+
+            let attributedString = NSMutableAttributedString(string: "")
+            let imageAttributedString = NSAttributedString(attachment: imageAttachment)
+            attributedString.append(imageAttributedString)
+            attributedString.append(NSAttributedString(string: " \(title)"))
+
+            webViewTitle.attributedText = attributedString
+        }
+    }
 }
