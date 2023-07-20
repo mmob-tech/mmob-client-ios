@@ -17,9 +17,8 @@ public class BrowserView: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         webView.layer.borderWidth = 1
         webView.layer.borderColor = UIColor(named: "Grey2")?.cgColor
-        buttonClose.tintColor = UIColor(named: "Grey4")
-        buttonBack.tintColor = UIColor(named: "Grey4")
-        buttonForward.tintColor = UIColor(named: "Grey4")
+        webViewSubTitle.textColor = UIColor(named: "Grey5")
+        buttonClose.tintColor = UIColor(named: "Grey5")
 
         updateState()
     }
@@ -68,14 +67,18 @@ public class BrowserView: UIViewController, WKNavigationDelegate {
 
         if webView.canGoBack == false {
             buttonBack.isUserInteractionEnabled = false
+            buttonBack.tintColor = UIColor(named: "Grey4")
         } else {
             buttonBack.isUserInteractionEnabled = true
+            buttonBack.tintColor = UIColor(named: "Grey5")
         }
 
         if webView.canGoForward == false {
             buttonForward.isUserInteractionEnabled = false
+            buttonForward.tintColor = UIColor(named: "Grey4")
         } else {
             buttonForward.isUserInteractionEnabled = true
+            buttonForward.tintColor = UIColor(named: "Grey5")
         }
     }
 
