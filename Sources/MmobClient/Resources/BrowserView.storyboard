@@ -77,19 +77,26 @@
                                             <wkPreferences key="preferences"/>
                                         </wkWebViewConfiguration>
                                     </wkWebView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V8p-HW-sCv" userLabel="Footer">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="V8p-HW-sCv" userLabel="Footer">
                                         <rect key="frame" x="0.0" y="709" width="393" height="50"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" image="chevron.backward" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="6hD-4c-nJ0">
-                                                <rect key="frame" x="0.0" y="2" width="380.33333333333331" height="46.333333333333329"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.left" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="BdQ-Bf-BGe" userLabel="BackButton">
+                                                <rect key="frame" x="8" y="9.9999999999999982" width="26" height="30.333333333333329"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="26" id="UJw-AS-coO"/>
+                                                </constraints>
                                             </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" image="chevron.backward" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="H4y-rV-0rb">
-                                                <rect key="frame" x="380.33333333333331" y="2" width="12.666666666666686" height="46.333333333333329"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="pbt-Mk-mYN" userLabel="ForwardButton">
+                                                <rect key="frame" x="359" y="9.9999999999999982" width="26" height="30.333333333333329"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="26" id="0Sn-Vg-UT6"/>
+                                                </constraints>
                                             </imageView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="Lff-VW-KJQ"/>
+                                            <constraint firstAttribute="height" constant="50" id="W8a-Cg-W5A"/>
                                         </constraints>
+                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                 </subviews>
                             </stackView>
@@ -105,11 +112,11 @@
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="buttonBack" destination="6hD-4c-nJ0" id="cbg-7J-g1P"/>
+                        <outlet property="buttonBack" destination="BdQ-Bf-BGe" id="Wan-Sl-V3V"/>
                         <outlet property="buttonClose" destination="STJ-zA-zqe" id="vUK-1L-LCg"/>
-                        <outlet property="buttonForward" destination="H4y-rV-0rb" id="uFw-ct-6Fg"/>
-                        <outlet property="textDomain" destination="2l5-y7-0U4" id="KfY-ti-fCo"/>
-                        <outlet property="textURL" destination="cXq-WI-SCK" id="J2b-a9-hm0"/>
+                        <outlet property="buttonForward" destination="pbt-Mk-mYN" id="dnI-2i-cQj"/>
+                        <outlet property="textDomain" destination="2l5-y7-0U4" id="nI7-GO-yhp"/>
+                        <outlet property="textURL" destination="cXq-WI-SCK" id="AIS-vL-YAU"/>
                         <outlet property="webView" destination="MsV-Ve-zve" id="HQe-KR-9Bb"/>
                     </connections>
                 </viewController>
@@ -119,7 +126,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="chevron.backward" catalog="system" width="97" height="128"/>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="lock.fill" catalog="system" width="125" height="128"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
