@@ -218,15 +218,17 @@ class MmobClientHelper {
 
     func setWebViewTitle(webViewTitle: UILabel, title: String, url: String) {
         if url.hasPrefix("https://") {
-            let image = UIImage(named: "lock.fill")
+            let symbolImage = UIImage(named: "lock.fill")
+            var selectedImage = symbolImage
 
+            // TODO: Find appropriate solution for < iOS 13. Currently will return black icon
             if #available(iOS 13.0, *) {
-                image!.withTintColor(UIColor(named: "Grey4")!)
+                selectedImage = symbolImage?.withTintColor(UIColor(named: "Grey4")!, renderingMode: .alwaysTemplate)
             }
 
-            // Now, use 'image' to create NSTextAttachment
+            // Now, use 'tintedImage' to create NSTextAttachment
             let imageAttachment = NSTextAttachment()
-            imageAttachment.image = image
+            imageAttachment.image = selectedImage
 
             let imageSize = CGSize(width: 12, height: 12)
             imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
