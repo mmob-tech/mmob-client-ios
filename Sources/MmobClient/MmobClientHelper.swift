@@ -91,21 +91,6 @@ class MmobClientHelper {
         return urlPath.contains("affiliate-redirect")
     }
 
-    func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
-        let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
-
-        switch environment {
-        case "local":
-            return URL(string: "http://localhost:3100/\(suffix)")!
-        case "dev":
-            return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
-        case "stag":
-            return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
-        default:
-            return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
-        }
-    }
-
     private func getBundleID() -> String {
         let bundleID = Bundle.main.bundleIdentifier!
         return bundleID
@@ -202,6 +187,21 @@ class MmobClientHelper {
         return rootDomain
     }
 
+    func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
+        let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
+
+        switch environment {
+        case "local":
+            return URL(string: "http://localhost:3100/\(suffix)")!
+        case "dev":
+            return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
+        case "stag":
+            return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
+        default:
+            return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
+        }
+    }
+
     // https://stackoverflow.com/a/58622251
     func getTopMostController() -> UIViewController {
         var topController: UIViewController = UIApplication.shared.keyWindow!.rootViewController!
@@ -209,5 +209,38 @@ class MmobClientHelper {
             topController = topController.presentedViewController!
         }
         return topController
+    }
+
+    func setDefaultWebViewValues(title: UILabel, subtitle: UILabel) {
+        title.text = "Loading..."
+        subtitle.text = "Loading webpage..."
+    }
+
+    func setWebViewTitle(webViewTitle: UILabel, title: String, url: String) {
+        if url.hasPrefix("https://") {
+            let symbolImage = UIImage(named: "lock.fill")
+            var selectedImage = symbolImage
+
+            // TODO: Find appropriate solution for < iOS 13. Currently will return black icon
+            if #available(iOS 13.0, *) {
+                selectedImage = symbolImage?.withTintColor(UIColor(named: "Grey4")!, renderingMode: .alwaysTemplate)
+            }
+
+            // Now, use 'tintedImage' to create NSTextAttachment
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = selectedImage
+
+            let imageSize = CGSize(width: 12, height: 12)
+            imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
+
+            let attributedString = NSMutableAttributedString(string: "")
+            let imageAttributedString = NSAttributedString(attachment: imageAttachment)
+            attributedString.append(imageAttributedString)
+            attributedString.append(NSAttributedString(string: " \(title)"))
+
+            webViewTitle.attributedText = attributedString
+        } else {
+            webViewTitle.text = title
+        }
     }
 }

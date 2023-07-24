@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,76 +17,107 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Domain" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jxN-Xv-MSn">
-                                <rect key="frame" x="45" y="60" width="304" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" customUserAgent="" translatesAutoresizingMaskIntoConstraints="NO" id="2ES-ZS-lQW">
-                                <rect key="frame" x="-1" y="104" width="395" height="668"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <rect key="contentStretch" x="0.0" y="0.0" width="0.5" height="1"/>
-                                <wkWebViewConfiguration key="configuration" allowsInlineMediaPlayback="YES">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lKo-UF-aGF">
-                                <rect key="frame" x="30" y="786" width="40" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" button="YES" image="YES" notEnabled="YES"/>
-                                </accessibility>
-                                <imageReference key="image" image="chevron.left" symbolScale="large"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleAspectFit" fixedFrame="YES" image="xmark" translatesAutoresizingMaskIntoConstraints="NO" id="P0e-u8-UPn">
-                                <rect key="frame" x="359" y="75" width="18" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
-                                </accessibility>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" fixedFrame="YES" image="chevron.right" translatesAutoresizingMaskIntoConstraints="NO" id="OFT-ti-1Ri">
-                                <rect key="frame" x="330" y="786" width="40" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" button="YES" image="YES" notEnabled="YES"/>
-                                </accessibility>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5pn-Pa-MFD">
-                                <rect key="frame" x="45" y="81" width="293" height="12"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="url">
-                                        <attributes>
-                                            <color key="NSColor" systemColor="systemGray2Color"/>
-                                            <font key="NSFont" metaFont="system" size="10"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="UYr-Wh-UWL" userLabel="BrowserView">
+                                <rect key="frame" x="0.0" y="59" width="393" height="710"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7yF-Ep-mLD" userLabel="Header">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="xmark" translatesAutoresizingMaskIntoConstraints="NO" id="8dJ-gP-fvi">
+                                                <rect key="frame" x="22" y="10" width="16" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="kFD-Dc-mgD"/>
+                                                </constraints>
+                                            </imageView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Lgr-wy-1Np" userLabel="InfoView">
+                                                <rect key="frame" x="46" y="10" width="301" height="30"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2l5-y7-0U4">
+                                                        <rect key="frame" x="0.0" y="0.0" width="301" height="17"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Loading webpage..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXq-WI-SCK">
+                                                        <rect key="frame" x="0.0" y="17" width="301" height="13"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="cXq-WI-SCK" firstAttribute="centerX" secondItem="Lgr-wy-1Np" secondAttribute="centerX" id="Uum-Dy-dtY"/>
+                                                    <constraint firstItem="2l5-y7-0U4" firstAttribute="centerX" secondItem="Lgr-wy-1Np" secondAttribute="centerX" id="W58-e7-6Gx"/>
+                                                </constraints>
+                                            </stackView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="adT-Z4-LOf">
+                                                <rect key="frame" x="355" y="10" width="16" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="06b-in-NGe"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="TQF-rk-8nY"/>
+                                        </constraints>
+                                        <edgeInsets key="layoutMargins" top="10" left="22" bottom="10" right="22"/>
+                                    </stackView>
+                                    <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MsV-Ve-zve">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="610"/>
+                                        <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <wkWebViewConfiguration key="configuration">
+                                            <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                            <wkPreferences key="preferences"/>
+                                        </wkWebViewConfiguration>
+                                    </wkWebView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="V8p-HW-sCv" userLabel="Footer">
+                                        <rect key="frame" x="0.0" y="660" width="393" height="50"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.left" translatesAutoresizingMaskIntoConstraints="NO" id="NyJ-4K-jpu">
+                                                <rect key="frame" x="22" y="10" width="14" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="14" id="jIG-G5-U8L"/>
+                                                </constraints>
+                                            </imageView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.right" translatesAutoresizingMaskIntoConstraints="NO" id="mgl-Uw-Vlb">
+                                                <rect key="frame" x="357" y="10" width="14" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="14" id="Sz8-AW-Yhp"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="W8a-Cg-W5A"/>
+                                        </constraints>
+                                        <edgeInsets key="layoutMargins" top="10" left="22" bottom="10" right="22"/>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="UYr-Wh-UWL" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="CKK-cH-6Mu"/>
+                            <constraint firstItem="UYr-Wh-UWL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="IkS-f5-Bc8"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="UYr-Wh-UWL" secondAttribute="bottom" id="Zlz-49-baC"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="UYr-Wh-UWL" secondAttribute="trailing" id="bvc-25-5b2"/>
+                        </constraints>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="buttonBack" destination="lKo-UF-aGF" id="Zmz-Ps-Kb7"/>
-                        <outlet property="buttonClose" destination="P0e-u8-UPn" id="s9l-bv-q4f"/>
-                        <outlet property="buttonForward" destination="OFT-ti-1Ri" id="1Xh-FW-Fm2"/>
-                        <outlet property="textDomain" destination="jxN-Xv-MSn" id="Buq-Jb-aFV"/>
-                        <outlet property="textURL" destination="5pn-Pa-MFD" id="iga-7L-Za2"/>
-                        <outlet property="webView" destination="2ES-ZS-lQW" id="ERP-mL-54W"/>
+                        <outlet property="buttonBack" destination="NyJ-4K-jpu" id="2Pr-Uy-RlF"/>
+                        <outlet property="buttonClose" destination="8dJ-gP-fvi" id="eKs-Dx-EiN"/>
+                        <outlet property="buttonForward" destination="mgl-Uw-Vlb" id="KY6-oR-imN"/>
+                        <outlet property="webView" destination="MsV-Ve-zve" id="HQe-KR-9Bb"/>
+                        <outlet property="webViewSubTitle" destination="cXq-WI-SCK" id="AIS-vL-YAU"/>
+                        <outlet property="webViewTitle" destination="2l5-y7-0U4" id="nI7-GO-yhp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="135.87786259541986" y="18.661971830985916"/>
+            <point key="canvasLocation" x="135.1145038167939" y="18.30985915492958"/>
         </scene>
     </scenes>
     <resources>
@@ -96,9 +126,6 @@
         <image name="xmark" width="8" height="8"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
