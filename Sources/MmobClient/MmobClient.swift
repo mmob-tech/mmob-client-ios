@@ -2,7 +2,7 @@ import WebKit
 
 public typealias MmobClientView = WKWebView
 
-public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
+public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate, UIGestureRecognizerDelegate {
     let helper = MmobClientHelper()
     // TODO: Call client with instanceDomain, will be a breaking change for a future date
     var instanceDomain: InstanceDomain = .MMOB
@@ -45,6 +45,46 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         return self.webView
     }
 
+    public func loadIntegrationEntryPoint(mmobConfiguration: MmobIntegration, instanceDomain: InstanceDomain) -> MmobClientView {
+        let configuration = mmobConfiguration.configuration
+        let customer = mmobConfiguration.customer
+        let parameters = self.helper.getIntegrationParameters(
+            configuration: configuration,
+            customer: customer
+        )
+        let url = self.helper.getUrl(environment: configuration.environment, instanceDomain: instanceDomain, suffix: "entry_point/cp_DhskfrQ5V0HLfcVwbl54Q/deployment/cpd_wAXWMCu8uI4ceSkU_225H")
+        let request = self.helper.getRequest(url: url, parameters: parameters)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.viewTap))
+
+        tapGesture.delegate = self
+
+        self.instanceDomain = instanceDomain
+        self.webView.addGestureRecognizer(tapGesture)
+        self.webView.navigationDelegate = self
+        self.webView.uiDelegate = self
+        self.webView.load(request)
+        return self.webView
+    }
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
+    @objc func viewTap() -> MmobClientView {
+        let testConfiguration = MmobIntegration(
+            configuration: MmobIntegrationConfiguration(
+                cp_id: "cp_TMaiVSyyzBx2rZqF-PqdY",
+                integration_id: "cpd_xH1KQOhFh_hIIVKTCBJF5",
+                environment: "stag"
+            ),
+            customer: MmobCustomerInfo(
+            )
+        )
+        let testInstanceDomain: InstanceDomain = .EFNETWORK
+        print("Tapped screen!")
+        return self.loadIntegration(mmobConfiguration: testConfiguration, instanceDomain: testInstanceDomain)
+    }
+
     // Handle window.open in the same webView
     public func webView(
         _ webView: WKWebView,
@@ -69,13 +109,21 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let instanceDomainString = self.helper.getInstanceDomain(instanceDomain: self.instanceDomain)
         let domain = self.helper.getRootDomain(from: url)
         let isAffiliateRedirect = self.helper.containsAffiliateRedirect(in: url.absoluteString)
+        let isDev = self.helper.isLocalhostURL(url: url)
 
-        if domain == instanceDomainString && !isAffiliateRedirect {
-            decisionHandler(.allow)
-        } else {
-            self.requestInMmobBrowser(url: url)
-            decisionHandler(.cancel)
+        // If running locally, load in iframe
+        if isDev {
+            return decisionHandler(.allow)
         }
+
+        // If domain is mmob and isn't an affiliate, load in iframe
+        if domain == instanceDomainString && !isAffiliateRedirect {
+            return decisionHandler(.allow)
+        }
+
+        // Load in MMOB In app browser
+        self.requestInMmobBrowser(url: url)
+        return decisionHandler(.cancel)
     }
 
     func requestInMmobBrowser(url: URL) {
