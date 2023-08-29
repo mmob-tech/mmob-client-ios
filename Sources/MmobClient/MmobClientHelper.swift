@@ -211,6 +211,13 @@ class MmobClientHelper {
         return topController
     }
 
+    func isLocalhostURL(url: URL) -> Bool {
+        if let scheme = url.scheme, let host = url.host {
+            return scheme == "http" && host == "localhost"
+        }
+        return false
+    }
+
     func setDefaultWebViewValues(title: UILabel, subtitle: UILabel) {
         title.text = "Loading..."
         subtitle.text = "Loading webpage..."
