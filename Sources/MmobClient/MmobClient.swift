@@ -84,7 +84,6 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
         // url domain is blacklisted, open in native browser, cancel current load
         let isBlacklistedDomain = self.helper.isBlacklistedDomain(url: url)
-        print("isBlacklistedDomain", isBlacklistedDomain)
         if isBlacklistedDomain {
             UIApplication.shared.open(url)
             return decisionHandler(.cancel)
