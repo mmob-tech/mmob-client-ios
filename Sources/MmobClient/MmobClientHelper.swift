@@ -87,8 +87,13 @@ public struct MmobDistribution {
 typealias MmobParameters = [String: Any?]
 
 class MmobClientHelper {
+    let AFFILIATE_REDIRECT_PATH = "affiliate-redirect"
+    let MMOB_ROOT_DOMAIN = "mmob.com"
+    let EFNETWORK_ROOT_DOMAIN = "ef-network.com"
+    let BLACKLISTED_DOMAINS = ["apps.apple.com"]
+
     func containsAffiliateRedirect(in urlPath: String) -> Bool {
-        return urlPath.contains("affiliate-redirect")
+        return urlPath.contains(AFFILIATE_REDIRECT_PATH)
     }
 
     private func getBundleID() -> String {
@@ -132,9 +137,9 @@ class MmobClientHelper {
     func getInstanceDomain(instanceDomain: InstanceDomain) -> String {
         switch instanceDomain {
         case InstanceDomain.EFNETWORK:
-            return "ef-network.com"
+            return EFNETWORK_ROOT_DOMAIN
         default:
-            return "mmob.com"
+            return MMOB_ROOT_DOMAIN
         }
     }
 
@@ -209,6 +214,23 @@ class MmobClientHelper {
             topController = topController.presentedViewController!
         }
         return topController
+    }
+
+    func isBlacklistedDomain(url: URL) -> Bool {
+        if let host = getHost(from: url.absoluteString) {
+            return BLACKLISTED_DOMAINS.contains(host)
+        } else {
+            return false
+        }
+    }
+
+    func isValidURL(url: URL) -> Bool {
+        return UIApplication.shared.canOpenURL(url)
+    }
+
+    func isValidUrlScheme(url: URL) -> Bool {
+        let urlString = url.absoluteString
+        return urlString.hasPrefix("http://") || urlString.hasPrefix("https://")
     }
 
     func setDefaultWebViewValues(title: UILabel, subtitle: UILabel) {

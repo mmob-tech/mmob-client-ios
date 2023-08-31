@@ -60,22 +60,46 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         return nil
     }
 
+    // Gives us a chance to take control when a URL is about to be loaded in the MmobView
+    // decisionHandler(.cancel) to cancel current load
     public func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: (WKNavigationActionPolicy) -> Void
     ) {
         let url = navigationAction.request.url!
-        let instanceDomainString = self.helper.getInstanceDomain(instanceDomain: self.instanceDomain)
-        let domain = self.helper.getRootDomain(from: url)
-        let isAffiliateRedirect = self.helper.containsAffiliateRedirect(in: url.absoluteString)
 
-        if domain == instanceDomainString && !isAffiliateRedirect {
-            decisionHandler(.allow)
-        } else {
-            self.requestInMmobBrowser(url: url)
-            decisionHandler(.cancel)
+        // url is invalid, cancel current load
+        let isValidUrl = self.helper.isValidURL(url: url)
+        if !isValidUrl {
+            return decisionHandler(.cancel)
         }
+
+        // url does not begin with http / https, open in native browser, cancel current load
+        let isValidUrlScheme = self.helper.isValidUrlScheme(url: url)
+        if !isValidUrlScheme {
+            UIApplication.shared.open(url)
+            return decisionHandler(.cancel)
+        }
+
+        // url domain is blacklisted, open in native browser, cancel current load
+        let isBlacklistedDomain = self.helper.isBlacklistedDomain(url: url)
+        if isBlacklistedDomain {
+            UIApplication.shared.open(url)
+            return decisionHandler(.cancel)
+        }
+
+        // Instance domain matches, is not an affiliate redirect, continue within current view
+        let domain = self.helper.getRootDomain(from: url)
+        let instanceDomainString = self.helper.getInstanceDomain(instanceDomain: self.instanceDomain)
+        let isAffiliateRedirect = self.helper.containsAffiliateRedirect(in: url.absoluteString)
+        if domain == instanceDomainString && !isAffiliateRedirect {
+            return decisionHandler(.allow)
+        }
+
+        // Otherwise, launch URL in MmobBrowser
+        self.requestInMmobBrowser(url: url)
+        return decisionHandler(.cancel)
     }
 
     func requestInMmobBrowser(url: URL) {
