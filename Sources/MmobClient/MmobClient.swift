@@ -92,8 +92,15 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         // Instance domain matches, is not an affiliate redirect, continue within current view
         let domain = self.helper.getRootDomain(from: url)
         let instanceDomainString = self.helper.getInstanceDomain(instanceDomain: self.instanceDomain)
+
         let isAffiliateRedirect = self.helper.containsAffiliateRedirect(in: url.absoluteString)
+        let isLocal = self.helper.containsLocalLink(in: url.absoluteString)
+
         if domain == instanceDomainString && !isAffiliateRedirect {
+            return decisionHandler(.allow)
+        }
+
+        if isLocal {
             return decisionHandler(.allow)
         }
 
