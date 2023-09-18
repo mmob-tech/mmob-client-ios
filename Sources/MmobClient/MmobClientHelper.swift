@@ -165,9 +165,10 @@ typealias MmobParameters = [String: Any?]
 
 class MmobClientHelper {
     let AFFILIATE_REDIRECT_PATH = "affiliate-redirect"
-    let LOCAL_DOMAIN = "localhost"
     let MMOB_ROOT_DOMAIN = "mmob.com"
     let EFNETWORK_ROOT_DOMAIN = "ef-network.com"
+
+    // Domains we want opened using native URL scheme (aka Safari)
     let BLACKLISTED_DOMAINS = ["apps.apple.com"]
 
     func containsAffiliateRedirect(in urlPath: String) -> Bool {
