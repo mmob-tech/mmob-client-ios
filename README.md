@@ -1,6 +1,6 @@
 # MMOB iOS Client 📱
 
-The MMOB iOS Client works across multiple iOS versions from **iOS 12.0** to **iOS 16.***
+The MMOB iOS Client works across multiple iOS versions from **iOS 12.0** to **iOS 16.\***
 
 ## Instructions to implement
 
@@ -33,7 +33,8 @@ class MmobViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             configuration: MmobIntegrationConfiguration(
                 cp_id: "YOUR_CP_ID_HERE",
                 integration_id: "YOUR_CP_DEPLOYMENT_ID_HERE",
-                locale: "en_GB"
+                locale: "en_GB",
+                signaure: "YOUR_SIGNATURE"
             ),
             customer: MmobCustomerInfo(
                 email: "john.smith@example.com",
