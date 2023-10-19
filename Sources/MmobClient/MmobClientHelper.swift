@@ -120,12 +120,14 @@ public struct MmobIntegrationConfiguration {
     var integration_id: String
     var environment: String
     var locale: String
+    var signature: String?
 
-    public init(cp_id: String, integration_id: String, environment: String = "production", locale: String = "en_GB") {
+    public init(cp_id: String, integration_id: String, environment: String = "production", locale: String = "en_GB", signature: String? = nil) {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
         self.locale = locale
+        self.signature = signature
     }
 }
 
@@ -133,11 +135,13 @@ public struct MmobDistributionConfiguration {
     var distribution_id: String
     var environment: String
     var locale: String
+    var signature: String?
 
-    public init(distribution_id: String, environment: String = "production", locale: String = "en_GB") {
+    public init(distribution_id: String, environment: String = "production", locale: String = "en_GB", signature: String? = nil) {
         self.distribution_id = distribution_id
         self.environment = environment
         self.locale = locale
+        self.signature = signature
     }
 }
 
@@ -234,6 +238,7 @@ class MmobClientHelper {
             "configuration": [
                 "distribution_id": configuration.distribution_id,
                 "locale": configuration.locale,
+                "signature": configuration.signature,
                 "identifier_type": "ios",
                 "identifier_value": getBundleID()
             ]
@@ -270,6 +275,7 @@ class MmobClientHelper {
             "cp_id": configuration.cp_id,
             "cp_deployment_id": configuration.integration_id,
             "locale": configuration.locale,
+            "signature": configuration.signature,
             "identifier_type": "ios",
             "identifier_value": getBundleID()
         ]
