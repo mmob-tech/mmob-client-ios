@@ -7,159 +7,86 @@
 
 import Foundation
 import SwiftUI
+import WebKit
+import UIKit
 
-public struct MmobCustomerInfo {
-    var email: String?
-    var title: String?
-    var first_name: String?
-    var surname: String?
-    var dob: String?
-    var phone_number: String?
-    var mobile_number: String?
-    var preferred_name: String?
-    var passport_number: String?
-    var national_insurance_number: String?
-    var building_number: String?
-    var address_1: String?
-    var address_2: String?
-    var address_3: String?
-    var town_city: String?
-    var county: String?
-    var postcode: String?
-    var country_of_residence: String?
-    var nationality: String?
-    var gender: String?
-    var relationship_status: String?
-    var number_of_children: Int?
-    var partner_first_name: String?
-    var partner_surname: String?
-    var partner_dob: String?
-    var partner_sex: String?
-    var relationship_to_partner: String?
-    var smoker: String?
-    var number_of_cigarettes_per_week: Int?
-    var drinker: String?
-    var number_of_units_per_week: Int?
-    var meta: [String: Any]?
+@objcMembers
+public class MmobCustomerInfo: NSObject {
+    @objc var email: String?
+    @objc var first_name: String?
+    @objc var surname: String?
+    @objc var gender: String?
+    @objc var title: String?
+    @objc var building_number: String?
+    @objc var address_1: String?
+    @objc var town_city: String?
+    @objc var postcode: String?
+    @objc var dob: String?
 
-    public init(
-        email: String? = nil,
-        title: String? = nil,
-        first_name: String? = nil,
-        surname: String? = nil,
-        dob: String? = nil,
-        phone_number: String? = nil,
-        mobile_number: String? = nil,
-        preferred_name: String? = nil,
-        passport_number: String? = nil,
-        national_insurance_number: String? = nil,
-        building_number: String? = nil,
-        address_1: String? = nil,
-        address_2: String? = nil,
-        address_3: String? = nil,
-        town_city: String? = nil,
-        county: String? = nil,
-        postcode: String? = nil,
-        country_of_residence: String? = nil,
-        nationality: String? = nil,
-        gender: String? = nil,
-        relationship_status: String? = nil,
-        number_of_children: Int? = nil,
-        partner_first_name: String? = nil,
-        partner_surname: String? = nil,
-        partner_dob: String? = nil,
-        partner_sex: String? = nil,
-        relationship_to_partner: String? = nil,
-        smoker: String? = nil,
-        number_of_cigarettes_per_week: Int? = nil,
-        drinker: String? = nil,
-        number_of_units_per_week: Int? = nil,
-        meta: [String: Any]? = nil
-    ) {
+    @objc public init(email: String? = nil, first_name: String? = nil, surname: String? = nil, gender: String? = nil, title: String? = nil, building_number: String? = nil, address_1: String? = nil, town_city: String? = nil, postcode: String? = nil, dob: String? = nil) {
         self.email = email
-        self.title = title
         self.first_name = first_name
         self.surname = surname
-        self.dob = dob
-        self.phone_number = phone_number
-        self.mobile_number = mobile_number
-        self.preferred_name = preferred_name
-        self.passport_number = passport_number
-        self.national_insurance_number = national_insurance_number
+        self.gender = gender
+        self.title = title
         self.building_number = building_number
         self.address_1 = address_1
-        self.address_2 = address_2
-        self.address_3 = address_3
         self.town_city = town_city
-        self.county = county
         self.postcode = postcode
-        self.country_of_residence = country_of_residence
-        self.nationality = nationality
-        self.gender = gender
-        self.relationship_status = relationship_status
-        self.number_of_children = number_of_children
-        self.partner_first_name = partner_first_name
-        self.partner_surname = partner_surname
-        self.partner_dob = partner_dob
-        self.partner_sex = partner_sex
-        self.relationship_to_partner = relationship_to_partner
-        self.smoker = smoker
-        self.number_of_cigarettes_per_week = number_of_cigarettes_per_week
-        self.drinker = drinker
-        self.number_of_units_per_week = number_of_units_per_week
-        self.meta = meta
+        self.dob = dob
     }
 }
 
-public enum InstanceDomain {
+@objc
+public enum InstanceDomain:Int {
     case MMOB, EFNETWORK
 }
 
-public struct MmobIntegrationConfiguration {
-    var cp_id: String
-    var integration_id: String
-    var environment: String
-    var locale: String
-    var signature: String?
+@objcMembers
+public class MmobIntegrationConfiguration: NSObject {
+    @objc var cp_id: String
+    @objc var integration_id: String
+    @objc var environment: String
+    @objc var locale: String
 
-    public init(cp_id: String, integration_id: String, environment: String = "production", locale: String = "en_GB", signature: String? = nil) {
+    @objc public init(cp_id: String, integration_id: String, environment: String = "production", locale: String = "en_GB") {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
         self.locale = locale
-        self.signature = signature
     }
 }
 
-public struct MmobDistributionConfiguration {
-    var distribution_id: String
-    var environment: String
-    var locale: String
-    var signature: String?
+@objcMembers
+public class MmobDistributionConfiguration:NSObject {
+    @objc var distribution_id: String
+    @objc var environment: String
+    @objc var locale: String
 
-    public init(distribution_id: String, environment: String = "production", locale: String = "en_GB", signature: String? = nil) {
+    @objc public init(distribution_id: String, environment: String = "production", locale: String = "en_GB") {
         self.distribution_id = distribution_id
         self.environment = environment
         self.locale = locale
-        self.signature = signature
     }
 }
 
-public struct MmobIntegration {
-    var configuration: MmobIntegrationConfiguration
-    var customer: MmobCustomerInfo
+@objcMembers
+public class MmobIntegration:NSObject {
+    @objc var configuration: MmobIntegrationConfiguration
+    @objc var customer: MmobCustomerInfo
 
-    public init(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) {
+    @objc public init(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) {
         self.configuration = configuration
         self.customer = customer
     }
 }
 
-public struct MmobDistribution {
-    var configuration: MmobDistributionConfiguration
-    var customer: MmobCustomerInfo
+@objcMembers
+public class MmobDistribution:NSObject {
+    @objc var configuration: MmobDistributionConfiguration
+    @objc var customer: MmobCustomerInfo
 
-    public init(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) {
+    @objc public init(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) {
         self.configuration = configuration
         self.customer = customer
     }
@@ -167,24 +94,15 @@ public struct MmobDistribution {
 
 typealias MmobParameters = [String: Any?]
 
-class MmobClientHelper {
+@objcMembers
+public class MmobClientHelper:NSObject {
     let AFFILIATE_REDIRECT_PATH = "affiliate-redirect"
     let MMOB_ROOT_DOMAIN = "mmob.com"
     let EFNETWORK_ROOT_DOMAIN = "ef-network.com"
-
-    // Domains we want opened using native URL scheme (aka Safari)
     let BLACKLISTED_DOMAINS = ["apps.apple.com"]
 
     func containsAffiliateRedirect(in urlPath: String) -> Bool {
         return urlPath.contains(AFFILIATE_REDIRECT_PATH)
-    }
-
-    func containsLocalLink(in urlPath: String) -> Bool {
-        if let url = URL(string: urlPath), let host = url.host, let port = url.port {
-            return host == "localhost" && port == 3100
-        }
-
-        return false
     }
 
     private func getBundleID() -> String {
@@ -192,58 +110,23 @@ class MmobClientHelper {
         return bundleID
     }
 
-    private func getCustomerInfoParameters(customer: MmobCustomerInfo) -> MmobParameters {
+    func getDistributionParameters(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
         let parameters: MmobParameters = [
             "email": customer.email,
-            "title": customer.title,
             "first_name": customer.first_name,
             "surname": customer.surname,
-            "dob": customer.dob,
-            "phone_number": customer.phone_number,
-            "mobile_number": customer.mobile_number,
-            "preferred_name": customer.preferred_name,
-            "passport_number": customer.passport_number,
-            "national_insurance_number": customer.national_insurance_number,
+            "title": customer.title,
             "building_number": customer.building_number,
             "address_1": customer.address_1,
-            "address_2": customer.address_2,
-            "address_3": customer.address_3,
             "town_city": customer.town_city,
-            "county": customer.county,
             "postcode": customer.postcode,
-            "country_of_residence": customer.country_of_residence,
-            "nationality": customer.nationality,
-            "gender": customer.gender,
-            "relationship_status": customer.relationship_status,
-            "number_of_children": customer.number_of_children,
-            "partner_first_name": customer.partner_first_name,
-            "partner_surname": customer.partner_surname,
-            "partner_dob": customer.partner_dob,
-            "partner_sex": customer.partner_sex,
-            "relationship_to_partner": customer.relationship_to_partner,
-            "smoker": customer.smoker,
-            "number_of_cigarettes_per_week": customer.number_of_cigarettes_per_week,
-            "drinker": customer.drinker,
-            "number_of_units_per_week": customer.number_of_units_per_week,
-            "meta": customer.meta
-        ]
-
-        // Filter nil values
-        return parameters.filter { $0.value != nil }
-    }
-
-    func getDistributionParameters(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
-        let customerInfoParameters = getCustomerInfoParameters(customer: customer)
-        var parameters: MmobParameters = [
             "configuration": [
                 "distribution_id": configuration.distribution_id,
-                "locale": configuration.locale,
-                "signature": configuration.signature,
                 "identifier_type": "ios",
-                "identifier_value": getBundleID()
+                "identifier_value": getBundleID(),
+                "locale": configuration.locale
             ]
         ]
-        parameters.merge(customerInfoParameters) { _, new in new }
 
         return parameters
     }
@@ -270,16 +153,19 @@ class MmobClientHelper {
     }
 
     func getIntegrationParameters(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
-        let customerInfoParameters = getCustomerInfoParameters(customer: customer)
-        var parameters: MmobParameters = [
+        let parameters: [String: String?] = [
+            "email": customer.email,
+            "first_name": customer.first_name,
+            "surname": customer.surname,
+            "title": customer.title,
+            "building_number": customer.building_number,
+            "address_1": customer.address_1,
+            "town_city": customer.town_city,
+            "postcode": customer.postcode,
             "cp_id": configuration.cp_id,
             "cp_deployment_id": configuration.integration_id,
-            "locale": configuration.locale,
-            "signature": configuration.signature,
-            "identifier_type": "ios",
-            "identifier_value": getBundleID()
+            "locale": configuration.locale
         ]
-        parameters.merge(customerInfoParameters) { _, new in new }
 
         return parameters
     }

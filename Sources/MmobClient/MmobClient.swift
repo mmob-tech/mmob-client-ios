@@ -1,6 +1,8 @@
 import WebKit
 
+
 public typealias MmobClientView = WKWebView
+
 
 public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
     let helper = MmobClientHelper()
@@ -8,6 +10,7 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
     var instanceDomain: InstanceDomain = .MMOB
     var webView = WKWebView()
 
+    @objc
     public func loadDistribution(
         mmobConfiguration: MmobDistribution,
         instanceDomain: InstanceDomain
@@ -27,7 +30,8 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.webView.load(request)
         return self.webView
     }
-
+    
+    @objc
     public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: InstanceDomain) -> MmobClientView {
         let configuration = mmobConfiguration.configuration
         let customer = mmobConfiguration.customer
@@ -45,7 +49,9 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         return self.webView
     }
 
+
     // Handle window.open in the same webView
+    @objc
     public func webView(
         _ webView: WKWebView,
         createWebViewWith configuration: WKWebViewConfiguration,
@@ -62,6 +68,7 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
     // Gives us a chance to take control when a URL is about to be loaded in the MmobView
     // decisionHandler(.cancel) to cancel current load
+    @objc
     public func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
@@ -108,7 +115,8 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.requestInMmobBrowser(url: url)
         return decisionHandler(.cancel)
     }
-
+    
+    @objc
     func requestInMmobBrowser(url: URL) {
         let topVC = self.helper.getTopMostController()
         let storyboard = UIStoryboard(name: "BrowserView", bundle: Bundle.module)
