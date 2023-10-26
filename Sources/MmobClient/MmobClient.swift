@@ -115,7 +115,6 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.requestInMmobBrowser(url: url)
         return decisionHandler(.cancel)
     }
-    
     @objc
     func requestInMmobBrowser(url: URL) {
         let topVC = self.helper.getTopMostController()
