@@ -14,36 +14,36 @@ import UIKit
 public class MmobCustomerInfo: NSObject {
     @objc var  email: String?
     @objc var  title: String?
-    @objc var first_name: String?
+    @objc var  first_name: String?
     @objc var  surname: String?
-     @objc var  dob: String?
-     @objc var  phone_number: String?
-     @objc var  mobile_number: String?
-     @objc var  preferred_name: String?
-     @objc var  passport_number: String?
-     @objc var  national_insurance_number: String?
-     @objc var  building_number: String?
-     @objc var  address_1: String?
-     @objc var  address_2: String?
-     @objc var  address_3: String?
-     @objc var  town_city: String?
-     @objc var  county: String?
-     @objc var  postcode: String?
-     @objc var  country_of_residence: String?
-     @objc var  nationality: String?
-     @objc var  gender: String?
-     @objc var  relationship_status: String?
-     @objc var  number_of_children: Int
-     @objc var  partner_first_name: String?
-     @objc var  partner_surname: String?
-     @objc var  partner_dob: String?
-     @objc var  partner_sex: String?
-     @objc var  relationship_to_partner: String?
-     @objc var  smoker: String?
-     @objc var  number_of_cigarettes_per_week: Int
-     @objc var  drinker: String?
-     @objc var  number_of_units_per_week: Int
-     @objc var  meta: [String: Any]?
+    @objc var  dob: String?
+    @objc var  phone_number: String?
+    @objc var  mobile_number: String?
+    @objc var  preferred_name: String?
+    @objc var  passport_number: String?
+    @objc var  national_insurance_number: String?
+    @objc var  building_number: String?
+    @objc var  address_1: String?
+    @objc var  address_2: String?
+    @objc var  address_3: String?
+    @objc var  town_city: String?
+    @objc var  county: String?
+    @objc var  postcode: String?
+    @objc var  country_of_residence: String?
+    @objc var  nationality: String?
+    @objc var  gender: String?
+    @objc var  relationship_status: String?
+    @objc var  number_of_children: Int
+    @objc var  partner_first_name: String?
+    @objc var  partner_surname: String?
+    @objc var  partner_dob: String?
+    @objc var  partner_sex: String?
+    @objc var  relationship_to_partner: String?
+    @objc var  smoker: String?
+    @objc var  number_of_cigarettes_per_week: Int
+    @objc var  drinker: String?
+    @objc var  number_of_units_per_week: Int
+    @objc var  meta: [String: Any]?
 
     @objc public init(
         email: String? = nil,
