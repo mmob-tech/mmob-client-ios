@@ -123,8 +123,17 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let browserView = initialViewController as! BrowserView
 
         if let initialViewController = initialViewController {
+            let constraints = [
+                topVC.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                topVC.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                topVC.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                topVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            ]
+            NSLayoutConstraint.activate(constraints)
+
             // TODO: Add an animated transition
             topVC.view.addSubview(initialViewController.view)
+
             initialViewController.view.frame = view.bounds
             topVC.addChild(initialViewController)
             initialViewController.didMove(toParent: self)
