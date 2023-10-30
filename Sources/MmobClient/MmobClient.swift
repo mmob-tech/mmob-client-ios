@@ -1,8 +1,6 @@
 import WebKit
 
-
 public typealias MmobClientView = WKWebView
-
 
 public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
     let helper = MmobClientHelper()
@@ -30,7 +28,7 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.webView.load(request)
         return self.webView
     }
-    
+
     @objc
     public func loadIntegration(mmobConfiguration: MmobIntegration, instanceDomain: InstanceDomain) -> MmobClientView {
         let configuration = mmobConfiguration.configuration
@@ -48,7 +46,6 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.webView.load(request)
         return self.webView
     }
-
 
     // Handle window.open in the same webView
     @objc
@@ -115,30 +112,41 @@ public class MmobClient: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.requestInMmobBrowser(url: url)
         return decisionHandler(.cancel)
     }
+
     @objc
     func requestInMmobBrowser(url: URL) {
         let topVC = self.helper.getTopMostController()
         let storyboard = UIStoryboard(name: "BrowserView", bundle: Bundle.module)
-        let initialViewController = storyboard.instantiateInitialViewController()
-        let browserView = initialViewController as! BrowserView
 
-        if let initialViewController = initialViewController {
-            let constraints = [
-                topVC.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-                topVC.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-                topVC.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                topVC.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-            ]
-            NSLayoutConstraint.activate(constraints)
+        if let initialViewController = storyboard.instantiateInitialViewController() as? BrowserView {
+            if let initialView = initialViewController.view {
+                topVC.addChild(initialViewController)
+                initialViewController.didMove(toParent: topVC)
 
-            // TODO: Add an animated transition
-            topVC.view.addSubview(initialViewController.view)
+                topVC.view.addSubview(initialView)
+                initialView.translatesAutoresizingMaskIntoConstraints = false
+                initialView.frame = topVC.view.bounds
 
-            initialViewController.view.frame = view.bounds
-            topVC.addChild(initialViewController)
-            initialViewController.didMove(toParent: self)
+                if #available(iOS 11.0, *) {
+                    let safeArea = topVC.view.safeAreaLayoutGuide
+                    NSLayoutConstraint.activate([
+                        initialView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+                        initialView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+                        initialView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+                        initialView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
+                    ])
+                } else {
+                    // If the device doesn't support safe area layout guide
+                    NSLayoutConstraint.activate([
+                        initialView.topAnchor.constraint(equalTo: topVC.topLayoutGuide.bottomAnchor),
+                        initialView.leadingAnchor.constraint(equalTo: topVC.view.leadingAnchor),
+                        initialView.trailingAnchor.constraint(equalTo: topVC.view.trailingAnchor),
+                        initialView.bottomAnchor.constraint(equalTo: topVC.bottomLayoutGuide.topAnchor)
+                    ])
+                }
 
-            browserView.loadURL(url: url)
+                initialViewController.loadURL(url: url)
+            }
         }
     }
 }
