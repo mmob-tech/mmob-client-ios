@@ -10,7 +10,7 @@ import SwiftUI
 import WebKit
 import UIKit
 
-@objcMembers
+@objc(MmobCustomerInfo)
 public class MmobCustomerInfo: NSObject {
     @objc var  email: String?
     @objc var  title: String?
@@ -115,12 +115,12 @@ public class MmobCustomerInfo: NSObject {
 }
 
 
-@objc
+@objc(InstanceDomain)
 public enum InstanceDomain:Int {
     case MMOB, EFNETWORK
 }
 
-@objcMembers
+@objc(MmobIntegrationConfiguration)
 public class MmobIntegrationConfiguration: NSObject {
     @objc var cp_id: String
     @objc var integration_id: String
@@ -137,7 +137,7 @@ public class MmobIntegrationConfiguration: NSObject {
     }
 }
 
-@objcMembers
+@objc(MmobDistributionConfiguration)
 public class MmobDistributionConfiguration:NSObject {
     @objc var distribution_id: String
     @objc var environment: String
@@ -152,7 +152,7 @@ public class MmobDistributionConfiguration:NSObject {
     }
 }
 
-@objcMembers
+@objc(MmobIntegration)
 public class MmobIntegration:NSObject {
     @objc var configuration: MmobIntegrationConfiguration
     @objc var customer: MmobCustomerInfo
@@ -163,7 +163,7 @@ public class MmobIntegration:NSObject {
     }
 }
 
-@objcMembers
+@objc(MmobDistribution)
 public class MmobDistribution:NSObject {
     @objc var configuration: MmobDistributionConfiguration
     @objc var customer: MmobCustomerInfo
@@ -174,228 +174,231 @@ public class MmobDistribution:NSObject {
     }
 }
 
-typealias MmobParameters = [String: Any?]
-
-@objcMembers
+@objc(MmobClientHelper)
 public class MmobClientHelper:NSObject {
     let AFFILIATE_REDIRECT_PATH = "affiliate-redirect"
-      let MMOB_ROOT_DOMAIN = "mmob.com"
-      let EFNETWORK_ROOT_DOMAIN = "ef-network.com"
+    let MMOB_ROOT_DOMAIN = "mmob.com"
+    let EFNETWORK_ROOT_DOMAIN = "ef-network.com"
+    
+    // Domains we want opened using native URL scheme (aka Safari)
+    let BLACKLISTED_DOMAINS = ["apps.apple.com"]
+    
+    func containsAffiliateRedirect(in urlPath: String) -> Bool {
+        return urlPath.contains(AFFILIATE_REDIRECT_PATH)
+    }
+   
+    @objc func containsLocalLink(in urlPath: String) -> Bool {
+        if let url = URL(string: urlPath), let host = url.host, let port = url.port {
+            return host == "localhost" && port == 3100
+        }
+        
+        return false
+    }
+    
+   @objc private func getBundleID() -> String {
+        let bundleID = Bundle.main.bundleIdentifier!
+        return bundleID
+    }
+    
+    @objc private func getCustomerInfoParameters(customer: MmobCustomerInfo) -> NSDictionary {
+        let parameters:NSMutableDictionary = [
+            "email": customer.email as Any,
+            "title": customer.title as Any,
+            "first_name": customer.first_name as Any,
+            "surname": customer.surname as Any,
+            "dob": customer.dob as Any,
+            "phone_number": customer.phone_number as Any,
+            "mobile_number": customer.mobile_number as Any,
+            "preferred_name": customer.preferred_name as Any,
+            "passport_number": customer.passport_number as Any,
+            "national_insurance_number": customer.national_insurance_number as Any,
+            "building_number": customer.building_number as Any,
+            "address_1": customer.address_1 as Any,
+            "address_2": customer.address_2 as Any,
+            "address_3": customer.address_3 as Any,
+            "town_city": customer.town_city as Any,
+            "county": customer.county as Any,
+            "postcode": customer.postcode as Any,
+            "country_of_residence": customer.country_of_residence as Any,
+            "nationality": customer.nationality as Any,
+            "gender": customer.gender as Any,
+            "relationship_status": customer.relationship_status as Any,
+            "number_of_children": customer.number_of_children ,
+            "partner_first_name": customer.partner_first_name as Any,
+            "partner_surname": customer.partner_surname as Any,
+            "partner_dob": customer.partner_dob as Any,
+            "partner_sex": customer.partner_sex as Any,
+            "relationship_to_partner": customer.relationship_to_partner as Any,
+            "smoker": customer.smoker as Any,
+            "number_of_cigarettes_per_week": customer.number_of_cigarettes_per_week ,
+            "drinker": customer.drinker as Any,
+            "number_of_units_per_week": customer.number_of_units_per_week as Any ,
+            "meta": customer.meta as Any
+        ]
+        return parameters
+    }
+        
+        @objc func getDistributionParameters(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) -> NSDictionary {
+            let customerInfoParameters = getCustomerInfoParameters(customer: customer)
+            
+            let parameters = NSMutableDictionary()
+            
+            let configurationDict: NSDictionary = [
+                "distribution_id": configuration.distribution_id as Any,
+                "locale": configuration.locale as Any,
+                "signature": configuration.signature as Any,
+                "identifier_type": "ios",
+                "identifier_value": getBundleID()
+            ]
+            
+            parameters.setValue(configurationDict, forKey: "configuration")
+            parameters.addEntries(from: customerInfoParameters as! [AnyHashable : Any])
+            
+            return parameters
+        }
+        
+        @objc func getHost(from url: String?) -> String? {
+            guard let url = url else {
+                return nil
+            }
+            
+            guard let parsedUrl = URL(string: url) else {
+                return nil
+            }
+            
+            return parsedUrl.host
+        }
+        
+        @objc func getInstanceDomain(instanceDomain: InstanceDomain) -> String {
+            switch instanceDomain {
+            case InstanceDomain.EFNETWORK:
+                return EFNETWORK_ROOT_DOMAIN
+            default:
+                return MMOB_ROOT_DOMAIN
+            }
+        }
+        
+        @objc func getIntegrationParameters(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) -> NSDictionary {
+            let customerInfoParameters = getCustomerInfoParameters(customer: customer)
+            
+            let parameters = NSMutableDictionary()
+            
+            parameters.setValue(configuration.cp_id as Any, forKey: "cp_id")
+            parameters.setValue(configuration.integration_id as Any, forKey: "cp_deployment_id")
+            parameters.setValue(configuration.locale as Any, forKey: "locale")
+            parameters.setValue(configuration.signature as Any, forKey: "signature")
+            parameters.setValue("ios", forKey: "identifier_type")
+            parameters.setValue(getBundleID(), forKey: "identifier_value")
+            
+            parameters.addEntries(from: customerInfoParameters as! [AnyHashable : Any])
+            
+            return parameters
+        }
+        
+        @objc func getRequest(url: URL, parameters: NSDictionary) -> URLRequest {
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            return request
+        }
+        
+        @objc func getRootDomain(from uri: URL) -> String? {
+            guard let host = uri.host else {
+                return nil
+            }
+            
+            let components = host.components(separatedBy: ".")
+            
+            guard components.count >= 2 else {
+                return nil
+            }
+            
+            let rootDomain = components[components.count - 2] + "." + components[components.count - 1]
+            
+            return rootDomain
+        }
+        
+        @objc func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
+            let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
+            
+            switch environment {
+            case "local":
+                return URL(string: "http://localhost:3100/\(suffix)")!
+            case "dev":
+                return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
+            case "stag":
+                return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
+            default:
+                return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
+            }
+        }
+        
+        // https://stackoverflow.com/a/58622251
+        @objc func getTopMostController() -> UIViewController {
+            var topController: UIViewController = UIApplication.shared.keyWindow!.rootViewController!
+            while topController.presentedViewController != nil {
+                topController = topController.presentedViewController!
+            }
+            return topController
+        }
+        
+        @objc func isBlacklistedDomain(url: URL) -> Bool {
+            if let host = getHost(from: url.absoluteString) {
+                return BLACKLISTED_DOMAINS.contains(host)
+            } else {
+                return false
+            }
+        }
+        
+        @objc func isValidURL(url: URL) -> Bool {
+            return UIApplication.shared.canOpenURL(url)
+        }
+        
+        @objc func isValidUrlScheme(url: URL) -> Bool {
+            let urlString = url.absoluteString
+            return urlString.hasPrefix("http://") || urlString.hasPrefix("https://")
+        }
+        
+        @objc func setDefaultWebViewValues(title: UILabel, subtitle: UILabel) {
+            title.text = "Loading..."
+            subtitle.text = "Loading webpage..."
+        }
+        
+        @objc func setWebViewTitle(webViewTitle: UILabel, title: String, url: String) {
+            if url.hasPrefix("https://") {
+                let symbolImage = UIImage(named: "lock.fill")
+                var selectedImage = symbolImage
+                
+                // TODO: Find appropriate solution for < iOS 13. Currently will return black icon
+                if #available(iOS 13.0, *) {
+                    selectedImage = symbolImage?.withTintColor(UIColor(named: "Grey4")!, renderingMode: .alwaysTemplate)
+                }
+                
+                // Now, use 'tintedImage' to create NSTextAttachment
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = selectedImage
+                
+                let imageSize = CGSize(width: 12, height: 12)
+                imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
+                
+                let attributedString = NSMutableAttributedString(string: "")
+                let imageAttributedString = NSAttributedString(attachment: imageAttachment)
+                attributedString.append(imageAttributedString)
+                attributedString.append(NSAttributedString(string: " \(title)"))
+                
+                webViewTitle.attributedText = attributedString
+            } else {
+                webViewTitle.text = title
+            }
+        }
+    }
 
-      // Domains we want opened using native URL scheme (aka Safari)
-      let BLACKLISTED_DOMAINS = ["apps.apple.com"]
 
-      func containsAffiliateRedirect(in urlPath: String) -> Bool {
-          return urlPath.contains(AFFILIATE_REDIRECT_PATH)
-      }
-
-      func containsLocalLink(in urlPath: String) -> Bool {
-          if let url = URL(string: urlPath), let host = url.host, let port = url.port {
-              return host == "localhost" && port == 3100
-          }
-
-          return false
-      }
-
-      private func getBundleID() -> String {
-          let bundleID = Bundle.main.bundleIdentifier!
-          return bundleID
-      }
-
-      private func getCustomerInfoParameters(customer: MmobCustomerInfo) -> MmobParameters {
-          let parameters: MmobParameters = [
-              "email": customer.email,
-              "title": customer.title,
-              "first_name": customer.first_name,
-              "surname": customer.surname,
-              "dob": customer.dob,
-              "phone_number": customer.phone_number,
-              "mobile_number": customer.mobile_number,
-              "preferred_name": customer.preferred_name,
-              "passport_number": customer.passport_number,
-              "national_insurance_number": customer.national_insurance_number,
-              "building_number": customer.building_number,
-              "address_1": customer.address_1,
-              "address_2": customer.address_2,
-              "address_3": customer.address_3,
-              "town_city": customer.town_city,
-              "county": customer.county,
-              "postcode": customer.postcode,
-              "country_of_residence": customer.country_of_residence,
-              "nationality": customer.nationality,
-              "gender": customer.gender,
-              "relationship_status": customer.relationship_status,
-              "number_of_children": customer.number_of_children,
-              "partner_first_name": customer.partner_first_name,
-              "partner_surname": customer.partner_surname,
-              "partner_dob": customer.partner_dob,
-              "partner_sex": customer.partner_sex,
-              "relationship_to_partner": customer.relationship_to_partner,
-              "smoker": customer.smoker,
-              "number_of_cigarettes_per_week": customer.number_of_cigarettes_per_week,
-              "drinker": customer.drinker,
-              "number_of_units_per_week": customer.number_of_units_per_week,
-              "meta": customer.meta
-          ]
-
-          // Filter nil values
-          return parameters.filter { $0.value != nil }
-      }
-
-      func getDistributionParameters(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
-          let customerInfoParameters = getCustomerInfoParameters(customer: customer)
-          var parameters: MmobParameters = [
-              "configuration": [
-                  "distribution_id": configuration.distribution_id,
-                  "locale": configuration.locale,
-                  "signature": configuration.signature,
-                  "identifier_type": "ios",
-                  "identifier_value": getBundleID()
-              ]
-          ]
-          parameters.merge(customerInfoParameters) { _, new in new }
-
-          return parameters
-      }
-
-      func getHost(from url: String?) -> String? {
-          guard let url = url else {
-              return nil
-          }
-
-          guard let parsedUrl = URL(string: url) else {
-              return nil
-          }
-
-          return parsedUrl.host
-      }
-
-      func getInstanceDomain(instanceDomain: InstanceDomain) -> String {
-          switch instanceDomain {
-          case InstanceDomain.EFNETWORK:
-              return EFNETWORK_ROOT_DOMAIN
-          default:
-              return MMOB_ROOT_DOMAIN
-          }
-      }
-
-      func getIntegrationParameters(configuration: MmobIntegrationConfiguration, customer: MmobCustomerInfo) -> MmobParameters {
-          let customerInfoParameters = getCustomerInfoParameters(customer: customer)
-          var parameters: MmobParameters = [
-              "cp_id": configuration.cp_id,
-              "cp_deployment_id": configuration.integration_id,
-              "locale": configuration.locale,
-              "signature": configuration.signature,
-              "identifier_type": "ios",
-              "identifier_value": getBundleID()
-          ]
-          parameters.merge(customerInfoParameters) { _, new in new }
-
-          return parameters
-      }
-
-      func getRequest(url: URL, parameters: MmobParameters) -> URLRequest {
-          var request = URLRequest(url: url)
-          request.httpMethod = "POST"
-          request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-          request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-          do {
-              request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
-          } catch {
-              print(error.localizedDescription)
-          }
-
-          return request
-      }
-
-      func getRootDomain(from uri: URL) -> String? {
-          guard let host = uri.host else {
-              return nil
-          }
-
-          let components = host.components(separatedBy: ".")
-
-          guard components.count >= 2 else {
-              return nil
-          }
-
-          let rootDomain = components[components.count - 2] + "." + components[components.count - 1]
-
-          return rootDomain
-      }
-
-      func getUrl(environment: String, instanceDomain: InstanceDomain, suffix: String = "boot") -> URL {
-          let instanceDomainString = getInstanceDomain(instanceDomain: instanceDomain)
-
-          switch environment {
-          case "local":
-              return URL(string: "http://localhost:3100/\(suffix)")!
-          case "dev":
-              return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
-          case "stag":
-              return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
-          default:
-              return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
-          }
-      }
-
-      // https://stackoverflow.com/a/58622251
-      func getTopMostController() -> UIViewController {
-          var topController: UIViewController = UIApplication.shared.keyWindow!.rootViewController!
-          while topController.presentedViewController != nil {
-              topController = topController.presentedViewController!
-          }
-          return topController
-      }
-
-      func isBlacklistedDomain(url: URL) -> Bool {
-          if let host = getHost(from: url.absoluteString) {
-              return BLACKLISTED_DOMAINS.contains(host)
-          } else {
-              return false
-          }
-      }
-
-      func isValidURL(url: URL) -> Bool {
-          return UIApplication.shared.canOpenURL(url)
-      }
-
-      func isValidUrlScheme(url: URL) -> Bool {
-          let urlString = url.absoluteString
-          return urlString.hasPrefix("http://") || urlString.hasPrefix("https://")
-      }
-
-      func setDefaultWebViewValues(title: UILabel, subtitle: UILabel) {
-          title.text = "Loading..."
-          subtitle.text = "Loading webpage..."
-      }
-
-      func setWebViewTitle(webViewTitle: UILabel, title: String, url: String) {
-          if url.hasPrefix("https://") {
-              let symbolImage = UIImage(named: "lock.fill")
-              var selectedImage = symbolImage
-
-              // TODO: Find appropriate solution for < iOS 13. Currently will return black icon
-              if #available(iOS 13.0, *) {
-                  selectedImage = symbolImage?.withTintColor(UIColor(named: "Grey4")!, renderingMode: .alwaysTemplate)
-              }
-
-              // Now, use 'tintedImage' to create NSTextAttachment
-              let imageAttachment = NSTextAttachment()
-              imageAttachment.image = selectedImage
-
-              let imageSize = CGSize(width: 12, height: 12)
-              imageAttachment.bounds = CGRect(origin: .zero, size: imageSize)
-
-              let attributedString = NSMutableAttributedString(string: "")
-              let imageAttributedString = NSAttributedString(attachment: imageAttachment)
-              attributedString.append(imageAttributedString)
-              attributedString.append(NSAttributedString(string: " \(title)"))
-
-              webViewTitle.attributedText = attributedString
-          } else {
-              webViewTitle.text = title
-          }
-      }
-}
