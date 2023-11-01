@@ -201,43 +201,47 @@ public class MmobClientHelper:NSObject {
         return bundleID
     }
     
-    @objc private func getCustomerInfoParameters(customer: MmobCustomerInfo) -> NSArray {
+    
+    @objc private func getCustomerInfoParameters(customer: MmobCustomerInfo) -> NSDictionary {
         let parameters = [
-            "email": customer.email ?? "",
-            "title": customer.title ?? "",
-            "first_name": customer.first_name ?? "",
-            "surname": customer.surname ?? "",
-            "dob": customer.dob ?? "",
-            "phone_number": customer.phone_number ?? "",
-            "mobile_number": customer.mobile_number ?? "",
-            "preferred_name": customer.preferred_name ?? "",
-            "passport_number": customer.passport_number ?? "",
-            "national_insurance_number": customer.national_insurance_number ?? "",
-            "building_number": customer.building_number ?? "",
-            "address_1": customer.address_1 ?? "",
-            "address_2": customer.address_2 ?? "",
-            "address_3": customer.address_3 ?? "",
-            "town_city": customer.town_city ?? "",
-            "county": customer.county ?? "",
-            "postcode": customer.postcode ?? "",
-            "country_of_residence": customer.country_of_residence ?? "",
-            "nationality": customer.nationality ?? "",
-            "gender": customer.gender ?? "",
-            "relationship_status": customer.relationship_status ?? "",
+            "email": customer.email,
+            "title": customer.title,
+            "first_name": customer.first_name,
+            "surname": customer.surname,
+            "dob": customer.dob,
+            "phone_number": customer.phone_number,
+            "mobile_number": customer.mobile_number,
+            "preferred_name": customer.preferred_name,
+            "passport_number": customer.passport_number,
+            "national_insurance_number": customer.national_insurance_number,
+            "building_number": customer.building_number,
+            "address_1": customer.address_1,
+            "address_2": customer.address_2,
+            "address_3": customer.address_3,
+            "town_city": customer.town_city,
+            "county": customer.county,
+            "postcode": customer.postcode,
+            "country_of_residence": customer.country_of_residence,
+            "nationality": customer.nationality,
+            "gender": customer.gender,
+            "relationship_status": customer.relationship_status,
             "number_of_children": customer.number_of_children,
-            "partner_first_name": customer.partner_first_name ?? "",
-            "partner_surname": customer.partner_surname ?? "",
-            "partner_dob": customer.partner_dob ?? "",
-            "partner_sex": customer.partner_sex ?? "",
-            "relationship_to_partner": customer.relationship_to_partner ?? "",
-            "smoker": customer.smoker ?? "",
+            "partner_first_name": customer.partner_first_name,
+            "partner_surname": customer.partner_surname,
+            "partner_dob": customer.partner_dob,
+            "partner_sex": customer.partner_sex,
+            "relationship_to_partner": customer.relationship_to_partner,
+            "smoker": customer.smoker,
             "number_of_cigarettes_per_week": customer.number_of_cigarettes_per_week ,
-            "drinker": customer.drinker ?? "",
+            "drinker": customer.drinker,
             "number_of_units_per_week": customer.number_of_units_per_week,
-            "meta": customer.meta ?? {}
-        ]
+            "meta": customer.meta
+        ] as [String : Any]
         // Filter nil values
-        return parameters.filter { $0.value != nil }
+        let filteredDictionary = parameters.filter { (_, value) in
+            return value != nil
+        }
+        return filteredDictionary as NSDictionary
     }
         
         @objc func getDistributionParameters(configuration: MmobDistributionConfiguration, customer: MmobCustomerInfo) -> NSDictionary {
