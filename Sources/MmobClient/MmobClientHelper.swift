@@ -121,15 +121,17 @@ public struct MmobIntegrationConfiguration {
     var environment: String
     var owner_id: String
     var session_id: String
+    var uid: String
     var locale: String
     var signature: String?
 
-    public init(cp_id: String, integration_id: String, environment: String = "production", owner_id: String = "owner_mmob", session_id: String = "1234", locale: String = "en_GB", signature: String? = nil) {
+    public init(cp_id: String, integration_id: String, environment: String = "production", owner_id: String = "owner_mmob", session_id: String = "1234", uid: String = "12345", locale: String = "en_GB", signature: String? = nil) {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
         self.owner_id = owner_id
         self.session_id = session_id
+        self.uid = uid
         self.locale = locale
         self.signature = signature
     }
@@ -277,9 +279,10 @@ class MmobClientHelper {
         let customerInfoParameters = getCustomerInfoParameters(customer: customer)
         var parameters: MmobParameters = [
             "cp_id": configuration.cp_id,
-            "cp_deployment_id": configuration.integration_id,
+            "integration_id": configuration.integration_id,
             "owner_id":configuration.owner_id,
             "sessionid": configuration.session_id,
+            "uid": configuration.uid,
             "locale": configuration.locale,
             "signature": configuration.signature,
             "identifier_type": "ios",
