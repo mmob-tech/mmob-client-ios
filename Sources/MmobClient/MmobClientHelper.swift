@@ -124,7 +124,7 @@ public struct MmobIntegrationConfiguration {
     var locale: String
     var signature: String?
 
-    public init(cp_id: String, integration_id: String, environment: String = "production", owner_id: String = "owner_mmob", session_id: String = "1234" locale: String = "en_GB", signature: String? = nil) {
+    public init(cp_id: String, integration_id: String, environment: String = "production", owner_id: String = "owner_mmob", session_id: String = "1234", locale: String = "en_GB", signature: String? = nil) {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
