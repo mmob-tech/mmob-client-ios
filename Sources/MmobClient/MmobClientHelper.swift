@@ -129,7 +129,7 @@ public struct MmobIntegrationConfiguration {
         self.integration_id = integration_id
         self.environment = environment
         self.owner_id = owner_id
-        self.session_id =session_id
+        self.session_id = session_id
         self.locale = locale
         self.signature = signature
     }
