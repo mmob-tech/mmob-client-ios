@@ -119,13 +119,15 @@ public struct MmobIntegrationConfiguration {
     var cp_id: String
     var integration_id: String
     var environment: String
+    var owner_id: String
     var locale: String
     var signature: String?
 
-    public init(cp_id: String, integration_id: String, environment: String = "production", locale: String = "en_GB", signature: String? = nil) {
+    public init(cp_id: String, integration_id: String, environment: String = "production", owner_id: String = "owner_mmob", locale: String = "en_GB", signature: String? = nil) {
         self.cp_id = cp_id
         self.integration_id = integration_id
         self.environment = environment
+        self.owner_id = owner_id
         self.locale = locale
         self.signature = signature
     }
