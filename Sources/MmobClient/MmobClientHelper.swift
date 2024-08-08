@@ -276,6 +276,7 @@ class MmobClientHelper {
         var parameters: MmobParameters = [
             "cp_id": configuration.cp_id,
             "cp_deployment_id": configuration.integration_id,
+            "owner_id":configuration.owner_id,
             "locale": configuration.locale,
             "signature": configuration.signature,
             "identifier_type": "ios",
