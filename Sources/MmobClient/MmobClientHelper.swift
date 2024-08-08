@@ -320,13 +320,13 @@ class MmobClientHelper {
 
         switch environment {
         case "local":
-            return URL(string: "http://localhost:3100/\(suffix)")!
+            return URL(string: "http://localhost:3300/\(suffix)")!
         case "dev":
-            return URL(string: "https://client-ingress.dev.\(instanceDomainString)/\(suffix)")!
+            return URL(string: "https://enterprise-client.dev.\(instanceDomainString)/\(suffix)")!
         case "stag":
-            return URL(string: "https://client-ingress.stag.\(instanceDomainString)/\(suffix)")!
+            return URL(string: "https://enterprise-client.dev.\(instanceDomainString)/\(suffix)")!
         default:
-            return URL(string: "https://client-ingress.prod.\(instanceDomainString)/\(suffix)")!
+            return URL(string: "https:/enterprise-client.dev.\(instanceDomainString)/\(suffix)")!
         }
     }
 
